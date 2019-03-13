@@ -1,0 +1,16 @@
+user@cu-cs-vm:~$ sudo -u postgres psql
+
+postgres=# create database login_db;
+
+postgres=# \c login_db;
+
+
+CREATE TABLE IF NOT EXISTS users (
+id VARCHAR(50),
+username VARCHAR(50),
+password VARCHAR(50)
+);
+
+login_db=# INSERT INTO users(id, username, password)
+VALUES('exid', 'Example', 'expassword')
+;
