@@ -8,6 +8,9 @@ All the code for our project
   We will have a task prediction feature, that given a specific task and how much time it will require to complete, &mu; will 
   split it into even portions before the due date and place in open spots in the users calender.
   
+  ![alt text](micromupicture/micromu.png "Picture of Login Page")
+  
+  
 <h3> Design and Architecture:</h3>
   <bold>Tools that are used:</bold>
   <ul>
