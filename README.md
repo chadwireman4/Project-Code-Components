@@ -3,10 +3,12 @@ All the code for our project
 
 
 <h2>Application: Micro Manage &mu; </h2>
-  Our applications is a web based Calender that will hold user events and appointments. <br>
+  Our applications is a web based Calender that will hold user events and appointments. <br> <br>
+  
   &mu; will notify users to upcoming appointments and color code events to urgency and importance. <br>
   We will have a task prediction feature, that given a specific task and how much time it will require to complete, &mu; will 
-  split it into even portions before the due date and place in open spots in the users calender.
+  split it into even portions before the due date and place in open spots in the users calender. <br>
+  Users will be able to view their schedules by day, week, or month.
   
   ![alt text](micromupicture/micromu.png "Picture of Login Page")
   
@@ -103,4 +105,19 @@ All the code for our project
   <li>Text and/or email notifications</li>
   <li>Making Postgres db able to ssh into from anywhere</li>
   </ul>
+  
+  
+  <h3>Individual Task Assignments</h3>
+		<strong>Front End</strong><br>
+		<bold>Brooke</bold><br>
+		 <bold>Chad</bold><br><br>
+		<strong>Back End</strong><br>
+		 <bold>Ian</bold><br>
+		 <bold>Chris</bold><br><br>
+		<strong>Integration</strong><br>
+		 <bold>Jacob</bold><br>
+  		 <bold>Rahul</bold><br><br><br>
+
+
+
 
