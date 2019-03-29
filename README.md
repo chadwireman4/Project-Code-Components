@@ -1,123 +1,31 @@
-# Project-Code-Components
-All the code for our project
+This is the start to our backend API:
 
+Note: Since we are using express and React, they have to be running at the same time for the app to work. We have express listening on port 3001 and then React can continue to listen on port 3000. We tell React to proxy the requests to port 3001. We can use the same server (localhost).
 
-<h2>Application: Micro Manage &mu; </h2>
-  Our applications is a web based Calender that will hold user events and appointments. <br> <br>
-  
-  &mu; will notify users to upcoming appointments and color code events to urgency and importance. <br>
-  We will have a task prediction feature, that given a specific task and how much time it will require to complete, &mu; will 
-  split it into even portions before the due date and place in open spots in the users calender. <br>
-  Users will be able to view their schedules by day, week, or month.
-  
-  ![alt text](micromupicture/micromu.png "Picture of Login Page")
-  
-  
-<h3> Design and Architecture:</h3>
-  <bold>Tools that are used:</bold>
-  <ul>
-  <li>HTML/CSS</li>
-  <li>JavaScript</li>
-  <li>React Framework</li>
-  <li>Node.js</li>
-  <li>Postgres SQL</li>
-  <li>WordPress (Possibly)</li>
-  </ul>
-  
-  <h3> Postgres Database <br> <br> </h3>
-  <h2>Users Table</h2>
-<table>
-	<tr>
-		<th>Columns</th>
-		<th>Column Values/Description</th>
-	</tr>
-	<tr>
-		<td>user_name</td>
-		<td>varchar | Name of the user </td>
-	</tr>
-	<tr>
-		<td>user_password</td>
-		<td>varchar | stores user password for entry and authentication</td>
-	</tr>
-	<tr>
-		<td>user_email</td>
-		<td>varchar | stores user email for reminders and two factor authentication</td>
-	</tr>
-	<tr>
-		<td>user_group</td>
-		<td>varchar | Stores the group the user is in for scheduling purposes</td>
-	</tr>
-	<tr>
-		<td>user_group_password</td>
-		<td>varchar | stores password to enter group</td>
-	</tr>
-</table>
-<p><br></p>
+We are using JSON as our data transfer format
+We are using Express as our framework.
+We are using pg-promise package so we can connect to postgres
+We will have seperate routes for:
 
-<h2>Appointments Table</h2>
-<table>
-	<tr>
-		<th>Columns</th>
-		<th>Column Values/Description</th>
-	</tr>
-	<tr>
-		<td>name_of_event</td>
-		<td>varchar | Name of event</td>
-	</tr>
-	<tr>
-		<td>date_of_event</td>
-		<td>timestamp without timezone | Date of the event</td>
-	</tr>
-	<tr>
-		<td>length_of_event</td>
-		<td>interval | Length of the event </td>
-	</tr>
-	<tr>
-		<td>urgency_of_event</td>
-		<td>integer | Integer value that determines how important the event is, 0-100 with 100 being of the utmost importance</td>
-	</tr>
-	<tr>
-		<td>color_of_event</td>
-		<td>varchar | Stores values in a "#xxxxx" format so users can customize their calender</td>
-	</tr>
-</table>
+Using GET requests for everything, but the login page which will use a POST request.
 
-  
-  
-  
-  For our calender main page we are using Js and the React framework to create a simple and intuitive UI.
-  Our login page is basic HTML and CSS.
-  For connecting our Postgres database with the webpage we will be using Node.js, which will also be used to query the database.
-  
+Get Routes:
 
-<h3>Accomplished so far:</h3>
--[X] Login page <br>
--[X]Postgres DB Basic Layout<br>
--[X]Basic layout of calender <br>
+/add
+/add/formsub
+/edit
+/edit/formsub
+/view
+/delete
+/delete/formsub
 
-<h3>What we are working on next:</h3>
+POST Routes:
 
+/login
+/login/submit
 
+In React, we will will call a method in ComponentDidMount method 
+called fetch which will get the response object grom the GET request
 
-  <ul>
-  <li>Making the website a Progressive web application, allowing users to update their calender without internet accesss, and having those updates transfer to the database the next time they log onto the internet. </li>
-  <li>Having Two-factor authentication for added security</li>
-  <li>Text and/or email notifications</li>
-  <li>Making Postgres db able to ssh into from anywhere</li>
-  </ul>
-  
-  
-  <h3>Individual Task Assignments</h3>
-		<strong>Front End</strong><br>
-		<bold>Brooke</bold><br>
-		 <bold>Chad</bold><br><br>
-		<strong>Back End</strong><br>
-		 <bold>Ian</bold><br>
-		 <bold>Chris</bold><br><br>
-		<strong>Integration</strong><br>
-		 <bold>Jacob</bold><br>
-  		 <bold>Rahul</bold><br><br><br>
-
-
-
+Then we access the content of the response object with json() method and update the state of the components with it 
 
