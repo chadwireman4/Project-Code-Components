@@ -24,8 +24,8 @@ const dbConfig = {
 	host: 'localhost',
 	port: 5432,
 	database: 'practicedb', //DB name here
-	user: 'brookestevens',
-	password: 'postgres'
+	user: '', //username
+	password: '' //your password
 };
 //make a connection to the database
 var db = pgp(dbConfig);
