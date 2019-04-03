@@ -44,12 +44,8 @@ All the code for our project
 		<td>varchar | stores user email for reminders and two factor authentication</td>
 	</tr>
 	<tr>
-		<td>user_group</td>
-		<td>varchar | Stores the group the user is in for scheduling purposes</td>
-	</tr>
-	<tr>
-		<td>user_group_password</td>
-		<td>varchar | stores password to enter group</td>
+		<td>if</td>
+		<td>serial | each user has unique id</td>
 	</tr>
 </table>
 <p><br></p>
@@ -65,12 +61,16 @@ All the code for our project
 		<td>varchar | Name of event</td>
 	</tr>
 	<tr>
-		<td>date_of_event</td>
+		<td>start_time</td>
 		<td>timestamp without timezone | Date of the event</td>
 	</tr>
 	<tr>
 		<td>length_of_event</td>
 		<td>interval | Length of the event </td>
+	</tr>
+	<tr>
+		<td>end_time</td>
+		<td>timestamp without timezone | end date of the event </td>
 	</tr>
 	<tr>
 		<td>urgency_of_event</td>
@@ -80,6 +80,15 @@ All the code for our project
 		<td>color_of_event</td>
 		<td>varchar | Stores values in a "#xxxxx" format so users can customize their calender</td>
 	</tr>
+	<tr>
+		<td>id_of_event</td>
+		<td>serial | unique id for each appointment</td>
+	</tr>
+	<tr>
+		<td>user_id</td>
+		<td>integer | Stores the unique id from users table</td>
+	</tr>
+	
 </table>
 
   
