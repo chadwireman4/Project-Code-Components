@@ -44,7 +44,7 @@ All the code for our project
 		<td>varchar | stores user email for reminders and two factor authentication</td>
 	</tr>
 	<tr>
-		<td>if</td>
+		<td>id</td>
 		<td>serial | each user has unique id</td>
 	</tr>
 </table>
