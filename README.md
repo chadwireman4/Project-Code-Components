@@ -3,7 +3,7 @@ All the code for our project
 
 
 <h2>Application: Micro Manage &mu; </h2>
-  Our applications is a web based Calender that will hold user events and appointments. <br> <br>
+  Our applications is a web based Calendar that will hold user events and appointments. <br> <br>
   
   &mu; will notify users to upcoming appointments and color code events to urgency and importance. <br>
   We will have a task prediction feature, that given a specific task and how much time it will require to complete, &mu; will 
