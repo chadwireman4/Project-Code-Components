@@ -171,6 +171,7 @@ All the code for our project
   <h3>Tools Used:</h3>
   <ul>
     <li>Postgres SQL</li>
+    <li>BCrypt Password Hasing</li>
   </ul>
   <h3>Why we chose these tools:</h3>
   We chose the Postgres Database because on the Heroku service it is 
@@ -182,6 +183,8 @@ All the code for our project
    One thing we were worried about when creating the databases, was that
       a person who gained access to a user's ID could access all of their
       information, which is why we decided to encrypt the users password and information.
+      <br>
+      We are using Bcrypt to hash the user password, for improved security.  
     
   <h3>Database Model</h3>
   When a user creates a profile in our system, they are given a unique ID.
