@@ -144,7 +144,7 @@ All the code for our project
   </ul>
 
 
-<h2>Front End</h2>
+<h2>Front End =====> </h2>
   <h3>Tools Used:</h3>
   <ul>
     <li>React</li>
@@ -154,7 +154,7 @@ All the code for our project
 
   <h3>Features: </h3>
 
-<h2>Integration Layer</h2>
+<h2>Integration Layer =====></h2>
 
   <h3>Tools Used:</h3>
   <ul>
@@ -165,7 +165,7 @@ All the code for our project
 
   <h3>Features: </h3>
 
-<h2>Back End</h2>
+<h2>Back End ======></h2>
 
 
   <h3>Tools Used:</h3>
