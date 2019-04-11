@@ -169,12 +169,14 @@ class MyCalendar extends Component {
           <div id="calendar">
             {this.renderBigCalendar()}
           </div>
-          <div id="todayEvents">
-            {this.renderTodaysEvents()}
+          <div id="other-content">
+            <div id="todayEvents">
+              {this.renderTodaysEvents()}
+            </div>
+            <div id="progressModule">
+              {this.renderProgressModule()}
+            </div>
           </div>
-          <div id="progressModule">
-            {this.renderProgressModule()}
-        </div>
         </div>
       );
     }
@@ -184,11 +186,13 @@ class MyCalendar extends Component {
         <div id="calendar">
           {this.renderBigCalendar()}
         </div>
-        <div id="todayEvents">
-            {this.renderTodaysEvents()}
-        </div>
-        <div id="progressModule">
-            {this.renderProgressModule()}
+        <div id="other-content">
+          <div id="todayEvents">
+              {this.renderTodaysEvents()}
+          </div>
+          <div id="progressModule">
+              {this.renderProgressModule()}
+          </div>
         </div>
       </div>
     );

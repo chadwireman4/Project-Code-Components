@@ -1,7 +1,7 @@
 //Parent component that will hold all of the UI modules
 //Child Components: Calendar, Progress bar
 
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import './index.css';
 
 //import the calendar module
@@ -20,4 +20,3 @@ class DashBoard extends Component{
 }
 
 export default DashBoard
-
