@@ -12,8 +12,8 @@
 
 ***********************/
 
-const username = 'e5aa565bd39f8a0f6abbfbc4a971b757';
-const password = '9765c52b455001784121034a200712b8';
+const username = '';
+const password = '';
 
 var express = require('express'); //Ensure our express framework has been added
 var app = express();
@@ -58,7 +58,7 @@ function convertEvents(a) {
 }
 
 //SERVE UP THE Login and Registration Pages!!
-request('https://api.darksky.net/forecast/30968187ff395abadb3d0b894cb5307e/40.0150,105.2705', function (error, response, body) {
+request('https://api.darksky.net/forecast/ THE API KEY /40.0150,105.2705', function (error, response, body) {
 	if (!error && response.statusCode == 200) {
 		var b = JSON.parse(body);
 		app.get('/api/darksky', (req, res) => {
