@@ -20,12 +20,20 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+    <!-- <script src="./myLib.js"></script> -->
+    <title>microManage</title>
   </head>
-  <body>
+  <body id="body">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div class = "rectangle"> </div>
-    <h1 id = "title" > Dashboard </h1>
+    <img id = logo src="micromanage.svg" alt="micro manage logo" >
+    <span id="dark-mode"> Dark Mode </span>
+    <label id="switch">
+      <input id = "check" type="checkbox">
+      <span class="slider round"></span>
+    </label>
+    <img id = logoutIcon class = "icons" src="logout-Icon-02.svg" alt='log out icon'>
+    <h1 id = "title" > microManage </h1>
     <div id = "root"></div>
     <!--
       This HTML file is a template.
