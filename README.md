@@ -14,7 +14,10 @@ Client side code written in React.js
     
   <h3>Features:</h3>
   <ul>
-    <li></li>
+    <li> Dark mode </li>
+    <li> Edit events </li>
+    <li> Email reminders </li>
+    <li> Weather Updates </li>
   </ul>
 
 
@@ -26,7 +29,7 @@ Client side code written in React.js
   </ul>
   <h3>Why we chose these tools:</h3>
 
-  <h3>Features: </h3>
+
 
 <h2>Integration Layer =====></h2>
 
@@ -66,7 +69,6 @@ Client side code written in React.js
     which is how we differentiate the appointments per user.
     The same goes for the user group table. 
   
-  ![alt text](micromupicture/database_layout.png "Picture of Login Page")
   
 
 =======
