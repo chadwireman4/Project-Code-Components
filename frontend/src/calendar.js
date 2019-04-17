@@ -9,12 +9,11 @@
 
 import React, { Component } from 'react'
 import './index.css';
-//import * as serviceWorker from './serviceWorker';
 
-//use big calendar react package
+//use big calendar react package and custom CSS file
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './react-big-calendar.css';
 
 //import the pop up modals
 import MyModal from './popUpModal';
@@ -195,16 +194,9 @@ class MyCalendar extends Component {
             <div id="todayEvents">
               {this.renderTodaysEvents()}
             </div>
-            <div id="progressModule">
-              {this.renderProgressModule()}
-            </div>
           </div>
-<<<<<<< HEAD
 
         </React.Fragment>
-=======
-        </div>
->>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
       );
     }
     return (
@@ -219,22 +211,10 @@ class MyCalendar extends Component {
         <div id="weatherToday">
             {this.renderWeatherModule()}
         </div>
-<<<<<<< HEAD
         <div id="todayEvents">
             {this.renderTodaysEvents()}
         </div>
       </React.Fragment>
-=======
-        <div id="other-content">
-          <div id="todayEvents">
-              {this.renderTodaysEvents()}
-          </div>
-          <div id="progressModule">
-              {this.renderProgressModule()}
-          </div>
-        </div>
-      </div>
->>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
     );
   }
 }
