@@ -1,7 +1,11 @@
-//http://intljusticemission.github.io/react-big-calendar/examples/index.html#intro
-//https://codesandbox.io/s/l98v2jjqjz
-//https://vickykedlaya.wordpress.com/2017/07/31/how-to-book-a-meeting-slot-using-react-big-calendar/
-//issues with statements getting called before promise is returned... look at the es7 async 
+///////////////////////////////////////////////
+//
+//  This is the main component that renders all of the others
+//  has the calendar in it
+//  weather and today's events are children
+//
+//
+///////////////////////////////////////////////// 
 
 import React, { Component } from 'react'
 import './index.css';
@@ -14,13 +18,14 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 //import the pop up modals
 import MyModal from './popUpModal';
-import AddEventModal from './addEventModal';
+import {AddEventModal,SetReminderModal} from './addEventModal';
+
 
 //import todays events
 import DayEvents from './todayEvents';
 
 //import the progress module
-import ProgressModule from "./TaskProgress";
+import WeatherModule from './weatherModule';
 
 // Setup the localizer by providing the moment (or globalize) Object
 // to the correct localizer.
@@ -37,8 +42,13 @@ class MyCalendar extends Component {
       idToUpdate: '',
       clicked: false,
       id: [],
-      myEventsList: [],
-      todaysEvents:[]
+      myEventsList: [{
+        'title' : 'testing',
+        'start' : new Date(2019, 3, 9),
+        'end' : new Date(2019, 3, 9)
+      }],
+      todaysEvents:[],
+      email : 'origamiguru98@gmail.com'
     }
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.update = this.update.bind(this);
@@ -52,11 +62,11 @@ class MyCalendar extends Component {
     fetch('/api')
     .then(res => res.json())
     .then(res => this.setState({
-      myEventsList: res.result,
-      id: res.id,
-      todaysEvents: res.today
+      myEventsList: convertToCalendarFormat(res.result), //turn date strings into date objects
+      todaysEvents: res.today,
+      id : res.id
     }))
-    .catch(err => console.log(err));    
+    .catch(err => console.log(err)); 
   }
 
   //toggling for the modal
@@ -146,6 +156,12 @@ class MyCalendar extends Component {
     )
   }
 
+  renderReminder() {
+    return (
+      <SetReminderModal email = {this.state.email} />
+    )
+  }
+
   renderTodaysEvents(){
     console.table(this.state.todaysEvents);
     return(
@@ -153,9 +169,9 @@ class MyCalendar extends Component {
     )
   }
 
-  renderProgressModule(){
+  renderWeatherModule(){
     return(
-      <ProgressModule eventName = {this.state.nameToUpdate} />
+      <WeatherModule eventName = {this.state.nameToUpdate} />
     );
   }
 
@@ -163,36 +179,56 @@ class MyCalendar extends Component {
     //render the modal if its clicked
     if (this.state.clicked) {
       return (
-        <div>
+        <React.Fragment>
           {this.renderAddEvent()}
+          {this.renderReminder()}
           {this.renderModal()}
-          <div id="calendar">
-            {this.renderBigCalendar()}
+          <div id = "calendar-wrapper">
+            <div id="calendar">
+              {this.renderBigCalendar()}
+            </div>
+          </div>
+          <div id="weatherToday">
+            {this.renderWeatherModule()}
           </div>
           <div id="todayEvents">
             {this.renderTodaysEvents()}
           </div>
-          <div id="progressModule">
-            {this.renderProgressModule()}
-        </div>
-        </div>
+
+        </React.Fragment>
       );
     }
     return (
-      <div id="grid">
+      <React.Fragment>
         {this.renderAddEvent()}
-        <div id="calendar">
-          {this.renderBigCalendar()}
+        {this.renderReminder()}
+        <div id = "calendar-wrapper">
+            <div id="calendar">
+              {this.renderBigCalendar()}
+            </div>
+        </div>
+        <div id="weatherToday">
+            {this.renderWeatherModule()}
         </div>
         <div id="todayEvents">
             {this.renderTodaysEvents()}
         </div>
-        <div id="progressModule">
-            {this.renderProgressModule()}
-        </div>
-      </div>
+      </React.Fragment>
     );
   }
+}
+
+function 	convertToCalendarFormat(a){
+  var eventList = [];
+  a.forEach( i => {
+    eventList.push({
+      'title' : i.title,
+      'start' : new Date(i.start),
+      'end' : new Date(i.end),
+      id : i.id
+    })
+  })
+  return eventList;
 }
 
 export default MyCalendar;

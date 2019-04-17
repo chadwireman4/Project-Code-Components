@@ -3,14 +3,14 @@
 
 /* animations */
 @keyframes fadeBackground{
-  from {background-color: bisque;}
+  from {background-color: white;}
   to {background-color: black;}
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: bisque;
+  background-color: white;
   font-family: 'Quicksand', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -137,73 +137,59 @@ h2{
   top: 5px;
 }
 
+#reminderIcon{
+  position: absolute;
+  left: 86%;
+  top: 5px;
+}
+
 /* menu */
 .rectangle {
-  height: 50px;
+  height: 8vh;
   width: 100%;
-  background-color:#E5E5E5;
+  background-color: rgb(55,120,168);
+  border-bottom: 2px solid black;
 }
 
-/* progress module */
-#progressModule{
+/* Weather Today*/
+#weatherToday{
   position: absolute;
-  top: 300px;
-  left: 5vw;
-  height: 200px;
-  width: 450px;
-  background-color: #E5E5E5;
-}
-
-#progressBar{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.circle {
-  height: 50px;
-  width: 50px;
-  background-color: #bbb;
-  border-radius: 50%;
-  line-height: 50px;
+  top: 9vh;
+  left: 0px;
+  height: 60vh;
+  width: 40vw;
+  background-color: rgb(217,233,250);
   text-align: center;
 }
 
-#progressButton{
-  margin-left: 20%;
-}
-
-/* figure this out soon */
-#progressLine{
-  height: 10px;
-  width: 200px;
-  background-color: black;
-}
-
 /* the calender div */
-#calendar{
+#calendar-wrapper{
   background-color: white;
   position: absolute;
-  top: 100px;
-  left: 42%;
+  bottom: 0px;
+  right: 0px;
+  width: 60vw;
+  height: 90vh;
+}
+
+#calendar{
+  background-color: white;
+  margin-top: 50px;
+  margin-left: 3%;
   height: 500px;
   width: 800px;
 }
 
-/* the add event form */
-
-#eventForm{
-  background-color: #E5E5E5;
-}
 
 /* current event form */
 
 #todayEvents{
-  background-color: #E5E5E5;
+  background-color: rgb(55,120,168);
   position: absolute;
-  top: 100px;
-  left: 5vw;
-  width: 450px;
+  bottom: 0px;
+  left: 0px;
+  width: 40vw;
+  height: 45vh;
 }
 
 /* DARK MODE */

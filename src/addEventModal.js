@@ -1,16 +1,115 @@
-//this is a child of the calendar Component
-//use react-awesome-modal for the update/delete part
-//create an alert that can accept more than argument
-//props via Calendar
-//Calendar sends a function that will handle the delete...
-//these functions are update and delete...
+//////////////////////////////////////////
+//
+//  this is the module for the modal classes
+//  Reminder icon and Add event icon here
+//
+//
+///////////////////////////////////////////
 
 import React, { Component } from 'react'
 import Modal from 'react-awesome-modal';
 import addIcon from './Add-icon-01.svg';
+import reminderIcon from './reminder.png';
+
+//Modal for setting a reminder
+
+export class SetReminderModal extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            visible: false,
+            time : '',
+            taskName :  'nothing'
+        }
+    this.handleInputChange = this.handleInputChange.bind(this);  
+    this.setReminder = this.setReminder.bind(this);  
+    this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    openModal() {
+        this.setState({
+            visible: true
+        });
+    }
+    closeModal() {
+        this.setState({
+            visible: false
+        });
+    }
+    handleInputChange = (event) => {
+        const target = event.target;
+        const value = event.target.value;
+        const _name = target.name;
+        this.setState({ [_name]: value });
+    }
+    handleSubmit(event){
+        event.preventDefault();
+        this.setReminder();
+        this.closeModal();
+    }
+    setReminder(){
+        var name = this.state.taskName;
+        var time = this.state.time;
+        var email = this.props.email;
+        var countDownDate = new Date(time).getTime();
+        console.log(`time is: ${time} and countDown is: ${countDownDate}`);
+
+        // Update the count down every 1 second
+        var x = setInterval(function() {
+        var now = new Date().getTime();
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+        var data = {
+            name: name,
+            email: email, //this.props.email
+        }
+        if (distance < 0) {
+            clearInterval(x);
+            alert("time is up");
+            //the post request here
+            fetch('/api/email', {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(data), // data can be `string` or {object}!
+                headers:{
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(res => res.json())
+              .then(res => this.props.onAddEvent(res.data, res.id))
+              .catch(e => console.log(e))
+        }
+        }, 1000);
+    }
+
+    render() {
+        return (
+            <section>
+                <img id = 'reminderIcon' className = "icons" src={reminderIcon} alt={'reminder icon'} onClick={() => this.openModal()}></img>
+                <Modal
+                    visible={this.state.visible}
+                    width="400"
+                    height="300"
+                    effect="fadeInUp"
+                    onClickAway={() => this.closeModal()}
+                >
+                    <div>
+                        <h2>Set a time</h2>
+                        <br/>
+                        Enter a time to be a reminded: <input type="datetime-local" value = {this.state.time} name= "time" onChange = {this.handleInputChange}/> 
+                        <br/>
+                        Enter reminder thing: <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/> 
+                        <br/>
+                        <button type= "button" onClick = {this.handleSubmit}> Submit </button>
+                    </div>
+                </Modal>
+            </section>
+        )
+    }
+}
+
+
 
 //Modal for adding an event
-class AddEventModal extends Component {
+export class AddEventModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -79,7 +178,8 @@ class AddEventModal extends Component {
           .then(res => this.props.onAddEvent(res.data, res.id))
           .catch(e => console.log(e))
 
-        this.closeModal();  
+        this.closeModal();
+        window.location.reload(); //force page to reload
     }
 
 
@@ -119,4 +219,3 @@ class AddEventModal extends Component {
     }
 }
 
-export default AddEventModal;
