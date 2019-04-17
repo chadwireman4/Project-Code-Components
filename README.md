@@ -1,7 +1,9 @@
 # Project-Code-Components
 All the code for our project
 
+Client side code written in React.js 
 
+<<<<<<< HEAD
 <h2>Application: Micro Manage &mu; </h2>
   Our applications is a web based Calendar that will hold user events and appointments. <br> <br>
   
@@ -195,3 +197,8 @@ All the code for our project
   ![alt text](micromupicture/database_layout.png "Picture of Login Page")
   
 
+=======
+npm install
+-make sure a node modules folder appears 
+npm start
+>>>>>>> client
