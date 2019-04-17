@@ -191,11 +191,20 @@ class MyCalendar extends Component {
           <div id="weatherToday">
             {this.renderWeatherModule()}
           </div>
-          <div id="todayEvents">
-            {this.renderTodaysEvents()}
+          <div id="other-content">
+            <div id="todayEvents">
+              {this.renderTodaysEvents()}
+            </div>
+            <div id="progressModule">
+              {this.renderProgressModule()}
+            </div>
           </div>
+<<<<<<< HEAD
 
         </React.Fragment>
+=======
+        </div>
+>>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
       );
     }
     return (
@@ -210,10 +219,22 @@ class MyCalendar extends Component {
         <div id="weatherToday">
             {this.renderWeatherModule()}
         </div>
+<<<<<<< HEAD
         <div id="todayEvents">
             {this.renderTodaysEvents()}
         </div>
       </React.Fragment>
+=======
+        <div id="other-content">
+          <div id="todayEvents">
+              {this.renderTodaysEvents()}
+          </div>
+          <div id="progressModule">
+              {this.renderProgressModule()}
+          </div>
+        </div>
+      </div>
+>>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
     );
   }
 }

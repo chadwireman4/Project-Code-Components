@@ -6,7 +6,7 @@
 //
 ///////////////////////////////////////////
 
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 import Modal from 'react-awesome-modal';
 import addIcon from './Add-icon-01.svg';
 import reminderIcon from './reminder.png';
@@ -200,7 +200,7 @@ export class AddEventModal extends Component {
 
     render() {
         return (
-            <section>
+            <section id="real-button">
                 <img id = 'addIcon' className = "icons" src={addIcon} alt={'add event icon'} onClick={() => this.openModal()}></img>
                 <Modal
                     visible={this.state.visible}

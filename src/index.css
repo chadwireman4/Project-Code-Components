@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* fonts */
 @import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Quicksand');
 
@@ -44,99 +45,94 @@ body {
   background-color: #ccc;
   -webkit-transition: .4s;
   transition: .4s;
+=======
+body {
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    min-width: 1350px;
+>>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+header {
+    background-color: #eee;
+    padding: 0;
+    margin: 0;
+    z-index: 1;
+    height: 50px;
+    margin-bottom: 30px;
 }
 
-input:checked + .slider {
-  background-color: #2196F3;
+#logo {
+    vertical-align: top;
+    display: inline;
+    height: 50px;
+    width: 50px;
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+header h1 {
+    display: inline-block;
+    padding: 7px 0 0 7px;
+    margin: 0;
 }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+header p {
+    padding: 0 10px 0 0;
+    display: inline;
+    float: right;
 }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 34px;
+.el-checkbox {
+    padding: 12.203px 20px 0 0;
+    display: inline;
+    float: right;
 }
 
-.slider.round:before {
-  border-radius: 50%;
+h2 {
+    text-align: center;
+    color: black;
+    margin: 0;
 }
 
-#dark-mode{
-  position: absolute;
-  top: 15px;
-  left: 73%;
+.icons {
+    height: 40px;
+    width: 40px;
+    display: inline;
+    float: right;
+    padding: 5px 10px 0 0;
 }
 
-
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+.icons:hover {
+    cursor: pointer;
 }
 
-#title{
-  position: absolute;
-  top: 0px;
-  left: 5%;
-  color: black;
-  z-index: 1;
-  font-family: 'Josefin Sans', sans-serif;
-  margin-top: 10px;
+/* the calender div */
+#calendar {
+    margin: 0 1% 0 2%;
+    float: left;
+    background-color: white;
+    left: 42%;
+    height: 600px;
+    width: 47%;
+    display: inline-block;
 }
 
-h2{
-  text-align: center;
-  color: black;
+#progressButton {
+    margin-left: 20%;
+}
+/* the add event form */
+#eventForm {
+    background-color: #e5e5e5;
 }
 
-/* logo */
-
-#logo{
-  position: absolute;
-  top: 0px;
-  height: 50px;
-  width: 50px;
-  z-index: 1;
+#other-content {
+    float: left;
+    width: 47%;
+    margin: 0 2% 0 1%;
 }
 
-/* icons */
-.icons{
-  height: 40px;
-  width: 40px;
-}
-
-#addIcon{
-  position: absolute;
-  left: 90%;
-  top: 5px;
-}
-
-#logoutIcon{
-  position: absolute;
-  left: 95%;
-  top: 5px;
-}
-
+<<<<<<< HEAD
 #reminderIcon{
   position: absolute;
   left: 86%;
@@ -190,16 +186,68 @@ h2{
   left: 0px;
   width: 40vw;
   height: 45vh;
+=======
+/* current event form */
+#todayEvents {
+    background-color: #e5e5e5;
+    padding: 50px;
+    margin: 0 0 30px 0;
+}
+
+/* progress module */
+#progressModule {
+    padding: 50px;
+    height: 200px;
+    background-color: #e5e5e5;
+}
+
+#progressBar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.circle {
+    height: 50px;
+    width: 50px;
+    background-color: #bbb;
+    border-radius: 50%;
+    line-height: 50px;
+    text-align: center;
+}
+
+#real-button {
+    position: absolute;
+    top: .2px;
+    right: 50px;
+>>>>>>> ccbcfa80d314b11a6b7b689221d14d1b799f2b8f
 }
 
 /* DARK MODE */
+body.dark {
+    background-color: black;
+    /*color: #ddd;*/
+    animation-name: fadeBackground;
+    animation-duration: .5s;
+}
+/*
+header.dark {
+    background-color: #444;
+}*/
 
-body.dark{
-  background-color: black;
-  animation-name: fadeBackground;
-  animation-duration: 1s;
-
+/* animations */
+@keyframes fadeBackground {
+    from {background-color: white;}
+    to {background-color: black;}
 }
 
-
-
+/* remove selecting capabilities where necessary */
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
