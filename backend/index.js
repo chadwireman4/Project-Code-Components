@@ -1,10 +1,10 @@
 /***********************
   Load Components!
 
-  Express      - A Node.js Framework
-  Body-Parser  - A tool to help use parse the data in a post request
+    Express      - A Node.js Framework
+    Body-Parser  - A tool to help use parse the data in a post request
 	Pg-Promise   - A database tool to help use connect to our PostgreSQL database
-	Request 		 - Used to access the 3rd part APIs
+	Request      - Used to access the 3rd part APIs
 	node-mailjet - Used for the emails
 	
 	THIS IS OUR REST API 
@@ -14,6 +14,7 @@
 
 const username = '';
 const password = '';
+const darkSkyAPI = '30968187ff395abadb3d0b894cb5307e';
 
 var express = require('express'); //Ensure our express framework has been added
 var app = express();
@@ -35,9 +36,9 @@ const port = 3001; //react-app will use 3000
 const dbConfig = {
 	host: 'localhost',
 	port: 5432,
-	database: 'practicedb', //DB name here
-	user: '', //username
-	password: '' //your password
+	database: 'micro_manage_db', //DB name here
+	user: 'brookestevens', //username
+	password: 'postgres' //your password
 };
 //make a connection to the database
 var db = pgp(dbConfig);
@@ -58,7 +59,7 @@ function convertEvents(a) {
 }
 
 //SERVE UP THE Login and Registration Pages!!
-request('https://api.darksky.net/forecast/API-KEY-HERE/40.0150,105.2705', function (error, response, body) {
+request(`https://api.darksky.net/forecast/${darkSkyAPI}/40.0150,105.2705`, function (error, response, body) {
 	if (!error && response.statusCode == 200) {
 		var b = JSON.parse(body);
 		app.get('/api/darksky', (req, res) => {

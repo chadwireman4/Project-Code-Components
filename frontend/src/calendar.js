@@ -9,6 +9,7 @@
 
 import React, { Component } from 'react'
 import './index.css';
+import './dark.css';
 
 //use big calendar react package and custom CSS file
 import BigCalendar from 'react-big-calendar'

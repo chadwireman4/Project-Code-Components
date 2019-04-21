@@ -3,6 +3,7 @@
 
 import React, {Component} from 'react'
 import './index.css';
+import './dark.css';
 
 //import the calendar module
 import MyCalendar from "./calendar";

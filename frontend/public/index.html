@@ -11,9 +11,9 @@
 </head>
 <body>
     <header class="no-select">
-    <img id=logo src="micromanage.svg" alt="micro manage logo">
+    <img id='logo' src="micromanage.svg" alt="micro manage logo">
     <h1>MicroManage</h1>
-    <img class="icons" src="icon-logout.svg" alt='log out icon'>
+    <img id = 'logOut' class="icons" src="icon-logout.svg" alt='log out icon'>
     <!-- <img id="addIcon" class="icons" src="icon-add.svg" alt='log out icon'> -->
     <div class="el-checkbox">
         <label class="el-switch">
@@ -24,6 +24,12 @@
     <p><b>Dark Mode<b></p>
     <script type="text/javascript">
         let checkBox = document.getElementById('dark-check');
+        var logOut = document.getElementById('logout');
+
+        logOut.addEventListener('click', function (){
+            location.replace('http//:localhost:3001');
+            //clear all events from that user 
+        }, false);
 
         if (checkBox != null) {
             document.getElementById('dark-check').onclick = function() {

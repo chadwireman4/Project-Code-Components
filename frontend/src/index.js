@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './checkbox.css';
 import './index.css';
+import './dark.css';
 import DashBoard from "./dashBoard";
 
 ReactDOM.render(
