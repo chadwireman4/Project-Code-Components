@@ -13,7 +13,8 @@
 
 const username = '';
 const password = '';
-const darkSkyAPI = '30968187ff395abadb3d0b894cb5307e';
+const darkSkyAPI = '8fb83a7d4217dd055384e4333c3c5ae2';
+var current_user_id;
 
 const express = require('express'); //Ensure our express framework has been added
 const path = require("path");
@@ -34,8 +35,8 @@ const dbConfig = {
 	host: 'localhost',
 	port: 5432,
 	database: 'micro_manage_db', //DB name here
-	user: 'brookestevens',
-	password: 'postgres'
+	user: 'rootuser',
+	password: 'password'
 };
 
 //make a connection to the database
@@ -77,7 +78,7 @@ request(`https://api.darksky.net/forecast/${darkSkyAPI}/40.0150,105.2705`, funct
 			res.send(b.currently)
 		})
     }
-    res.send({error: 'error occured'});
+    
 });
 
 //for the email API --> using mailjet package 
@@ -125,64 +126,70 @@ app.get('/', (req, res) => {
 });
 
 app.get('/registration', (req, res) => {
-	res.sendFile(path.join(__dirname, '/public/registration.html'));
+    res.sendFile(path.join(__dirname, '/public/registration.html'));
+    
 });
 
 
 //redirect to the registration page
 //start on the login page
 app.post('/', (req, res) => {
-	var user = req.body.Username;
-	var pass = req.body.Password;
-	console.log(`user: ${user} and pass: ${pass}`);
-	if (user === '' && pass === '') {
-		res.send({ message: "error" });
-	}
-	//check if the user is verified first
-	else if (user === '' || pass === '') {
-		res.send({ message: "error" });
-	}
-	else {
-		res.send({ message: "success" });
-	}
+    //Checks if user-name OR email is in db
+    //Returns true or false.
+    console.log("Checking email and password for login page..");
+
+    var password = req.body.Password;
+    var email = req.body.Email;
+
+    console.log("Password:" + password);
+    console.log("Email:" + email );
+
+    var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_email = '${email}' AND user_password ='${password}' );`;
+
+
+    db.one(query_statement)
+    .then( data => {
+        console.log("Database queried successfully...");
+        console.log(data.exists);
+        res.send({
+            data:data.exists,
+            message:"Success",
+        });
+        res.end();
+    })
+    .catch( err => {
+        console.log("Error: " + err );
+    });
 });
+
+
 
 //icons for page
 app.get('/micromanage.svg', (req, res) => { res.sendFile(path.join(__dirname, '/public/micromanage.svg')) });
-//Registration page
-app.post('/registration', (req, res) => {
-	var name = req.body.Username;
-	var email = req.body.Email;
-	var password = req.body.Password;
-	//if all credentials work out then let them through
-	if (name !== '' && email !== '' && password !== '') {
-		res.redirect('http://localhost:3000');
-	}
-	else {
-		console.log("error");
-		res.redirect('/registration');
-	}
-});
+
+
+
 
 //display the events
 app.get('/api/display-events-for-user', (req,res) => {
 
-	var user_id = req.query.user_id;
-	user_id = '1';
-
-	var query = `SELECT * FROM appointments WHERE user_id = '${user_id}'`;
-
+    var query = `SELECT * FROM appointments WHERE user_id = '${+current_user_id}'`;
+    var query_two = `SELECT * FROM appointments WHERE user_id = '${+current_user_id}' 
+    AND DATE(event_start_time) = CURRENT_DATE`;
+    
   db.task('get-everything', task => {
     return task.batch([
-				task.any(query)
+                task.any(query),
+                task.any(query_two)
     ]);
 	})
 	.then(data =>{
     //success
     	res.send({
-    			data: data[0]
+                data: data[0],
+                todaysEvents: data[1]
     	});
-    	console.log("Sent events, succcess");
+    	console.log("Sent events, success");
 
 	})
 	.catch(error =>{
@@ -191,18 +198,57 @@ app.get('/api/display-events-for-user', (req,res) => {
 	});
 });
 
-app.get('/api/check-user',(req,res) => {
+app.post('/api/check-user',(req,res) => {
     //Checks if user-name OR email is in db
     //Returns true or false.
-    console.log("Checking User.");
+    console.log("Checking email..");
 
-    var name = req.query.user_name;
+    var name = req.body.Username;
+	var email = req.body.Email;
+	var password = req.body.Password;
+    
+    console.log("Email:" + email );
+
+    var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_email = '${ email }');`;
+    var query_statement_two = `INSERT INTO users(user_name , user_password,
+        user_email) VALUES('${name}', '${password}', '${email}');`;
+    var query_statement_three = `SELECT id FROM users WHERE user_email = '${email}'`;
+    
+    db.one(query_statement)
+    .then( data => {
+        console.log("Database queried successfully in chec user...");
+        console.log(data.exists);
+        if(!data.exists){
+            console.log(data.exists);
+            db.none(query_statement_two);
+            db.one(query_statement_three)
+            .then(data =>{
+                console.log("New User ID: " + data.id);
+                current_user_id = data.id;
+            })
+            .catch(er => console.log(er) );
+            
+            res.redirect('http://localhost:3000');
+        }
+    })
+    .catch( err => {
+        console.log("Error: " + err );
+    });
+});
+
+
+app.get('/api/login-check',(req,res) => {
+    //Checks if user-name OR email is in db
+    //Returns true or false.
+    console.log("Checking email and password for login page..");
+
+    var password = req.query.user_password;
     var email = req.query.user_email;
 
-    console.log("Name: " + name);
+    console.log("Password: " + password);
     console.log("email:" + email );
 
-    var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_name = '${ name }' OR user_email = '${{ email }}');`;
+    var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_email = '${email}' AND user_password ='${password}' );`;
 
 
     db.one(query_statement)
@@ -217,6 +263,36 @@ app.get('/api/check-user',(req,res) => {
         console.log("Error: " + err );
     });
 });
+
+
+app.get('/api/validated',(req,res) => {
+    //Checks if user-name OR email is in db
+    //Returns true or false.
+    console.log("Fetching user id with email..");
+
+    
+    var email = req.query.user_email;
+    email = 'abc@gmail.com';
+    console.log("email:" + email );
+
+    var query_statement = `SELECT id FROM users WHERE user_email = '${email}';`;
+
+
+    db.one(query_statement)
+    .then( data => {
+        console.log("Database queried successfully...");
+        current_user_id = data.id;
+        res.send({ 
+            message:"Success",
+        });
+        res.end();
+    })
+    .catch( err => {
+        console.log("Error: " + err );
+    });
+});
+
+
 
 app.get('api/add-user',(req,res) => {
     //Adds User to user table
@@ -238,17 +314,24 @@ app.get('api/add-user',(req,res) => {
     });
 });
 
-app.get('api/add-appointment',(req,res) =>{
+
+
+app.get('/api/add-appointment',(req,res) =>{
     //Requires user_id from front end
     //Adds appointment to appointments table
     console.log("Adding Event.");
-    var user_id = req.body.user_id;
-    var name = req.body.event_name;
-    var length = req.body.event_length;
-    var start = req.body.event_start_time;
-    var end = req.body.event_end_time;
-    var urg = req.body.event_urgency;
-    var color = req.body.event_color;
+    var name = req.query.event_name;
+    var length = req.query.event_length;
+    var start = req.query.event_start_time;
+    var end = req.query.event_end_time;
+    var urg = req.query.event_urgency;
+    var color = req.query.event_color;
+    user_id='1';
+    name = '';
+    length = '';
+    start = '';
+    end = '';
+    color = '';
 
 
     var query_statement = `INSERT INTO appointments (
@@ -260,13 +343,13 @@ app.get('api/add-appointment',(req,res) =>{
     event_urgency ,
     event_color )
     VALUES ( 
-        (SELECT id FROM users WHERE id = '${{user_id}}'),
-        '${{ name }}' ,
-        '${{ length }}' , 
-        '${{ start }}' ,
-        '${{ end }}' ,
-        '${{ urg }}' ,
-        '${{ color }}' );`;
+        (SELECT id FROM users WHERE id = '${+current_user_id}'),
+        '${ name }' ,
+        '${ length }' , 
+        '${ start }' ,
+        '${ end }' ,
+        '${ urg }' ,
+        '${ color }' );`;
 
 
         db.none(query_statement)
@@ -304,10 +387,10 @@ app.get('api/delete-event', (req,res) =>{
     console.log("Deleting event.");
 
     var event_name = req.body.event_name;
-    var user_id = req.body.user_id;
+    
 
     var query_statement = `DELETE FROM ONLY 
-    appointments WHERE user_id = '${user_id}' AND event_name = '${event_name}';`;
+    appointments WHERE user_id = '${+current_user_id}' AND event_name = '${event_name}';`;
 
     db.none(query_statement)
     .then( () => {
@@ -319,57 +402,17 @@ app.get('api/delete-event', (req,res) =>{
 
 });
 
-app.get('api/add-appointment',(req,res) =>{
-    //Requires user_id from front end
-    //Adds appointment to appointments table
-    console.log("Adding Event.");
-    var user_id = req.body.user_id;
-    var name = req.body.event_name;
-    var length = req.body.event_length;
-    var start = req.body.event_start_time;
-    var end = req.body.event_end_time;
-    var urg = req.body.event_urgency;
-    var color = req.body.event_color;
-
-
-    var query_statement = `INSERT INTO appointments (
-    user_id , 
-    event_name , 
-    event_length , 
-    event_start_time , 
-    event_end_time , 
-    event_urgency ,
-    event_color )
-    VALUES ( 
-        (SELECT id FROM users WHERE id = '${{user_id}}'),
-        '${{ name }}' ,
-        '${{ length }}' , 
-        '${{ start }}' ,
-        '${{ end }}' ,
-        '${{ urg }}' ,
-        '${{ color }}' );`;
-
-
-        db.none(query_statement)
-        .then( () => {
-            console.log("Success");
-        })
-        .catch( err => {
-            console.log("Error: " + err );
-        });
-});
 
 app.get('api/delete-event',(req,res) =>{
     //Requires user_id from front end
     //Deletes appointment
     console.log("Deleting Event.");
 
-    var user_id = req.body.user_id;
     var name = req.body.event_name;
 
 
     var query_statement = `DELETE FROM ONLY 
-    appointments WHERE user_id = '${user_id}' AND event_name = '${name}';`;
+    appointments WHERE user_id = '${+current_user_id}' AND event_name = '${name}';`;
 
 
         db.none(query_statement)
@@ -383,12 +426,11 @@ app.get('api/delete-event',(req,res) =>{
 
 app.get('api/edit-event-name',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
     var name = req.body.event_name;
     var newName = req.body.new_event_name;
     var query_statement = `UPDATE only appointments 
 	SET event_name = '${newName}'
-	WHERE user_id = '${user_id}' 
+	WHERE user_id = '${+current_user_id}' 
 	AND event_name = '${name}';`;
     db.none(query_statement)
     .then( () => {
@@ -401,13 +443,12 @@ app.get('api/edit-event-name',(req,res) =>{
 
 app.get('api/edit-event-start-time',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
     var name = req.body.event_name;
     var new_start_time = req.body.new_start_time;
 
     var query_statement = `UPDATE only appointments 
 	SET event_start_time = '${new_start_time}'
-	WHERE user_id = '${user_id}' 
+	WHERE user_id = '${+current_user_id}' 
 	AND event_name = '${name}';`;
 
     db.none(query_statement)
@@ -421,13 +462,12 @@ app.get('api/edit-event-start-time',(req,res) =>{
 
 app.get('api/edit-event-end-time',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
     var name = req.body.event_name;
     var new_end_time = req.body.new_end_time;
 
     var query_statement = `UPDATE only appointments 
 	SET event_end_time = '${new_end_time}'
-	WHERE user_id = '${user_id}' 
+	WHERE user_id = '${+current_user_id}' 
 	AND event_name = '${name}';`;
 
     db.none(query_statement)
@@ -441,13 +481,13 @@ app.get('api/edit-event-end-time',(req,res) =>{
 
 app.get('api/edit-event-color',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
+  
     var name = req.body.event_name;
     var new_color = req.body.new_color;
             
     var query_statement = `UPDATE only appointments 
 	SET event_color = '${new_color}'
-	WHERE user_id = '${user_id}' 
+	WHERE user_id = '${+current_user_id}' 
 	AND event_name = '${name}';`;
 
     db.none(query_statement)
@@ -461,14 +501,14 @@ app.get('api/edit-event-color',(req,res) =>{
 
 app.get('api/edit-user-password',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
+   
     var name = req.body.user_name;
     var new_user_password = req.body.new_user_password;
             
     var query_statement = `UPDATE only users
 	SET user_password = '${{new_user_password}}'
 	WHERE user_name = '${{user_name}}'
-	AND user_id = '${{user_id}}';`;
+	AND user_id = '${+current_user_id}';`;
 
     db.none(query_statement)
     .then( () => {
@@ -482,14 +522,13 @@ app.get('api/edit-user-password',(req,res) =>{
 
 app.get('api/edit-user-email',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
     var name = req.body.user_name;
     var new_user_email = req.body.new_user_email;
             
     var query_statement = `UPDATE only users
 	SET user_email = '${{new_user_email}}'
 	WHERE user_name = '${{user_name}}'
-	AND user_id = '${{user_id}}';`;
+	AND user_id = '${+current_user_id}';`;
 
     db.none(query_statement)
     .then( () => {
@@ -502,14 +541,13 @@ app.get('api/edit-user-email',(req,res) =>{
 
 app.get('api/edit-user-name',(req,res) =>{
     //Requires user_id from front end
-   	var user_id = req.body.user_id;
     var password = req.body.user_password;
     var new_user_name = req.body.new_user_name;
             
     var query_statement = `UPDATE only users
 	SET user_name = '${{new_user_name}}'
 	WHERE user_password = '${{password}}'
-	AND user_id = '${{user_id}}';`;
+	AND user_id = '${+current_user_id}';`;
 
     db.none(query_statement)
     .then( () => {
