@@ -8,8 +8,8 @@
 
 import React, {Component} from 'react'
 import Modal from 'react-awesome-modal';
-import addIcon from './Add-icon-01.svg';
-import reminderIcon from './reminder.png';
+import addIcon from './icon-add.svg';
+import reminderIcon from './icon-reminder.svg';
 
 //Modal for setting a reminder
 
@@ -86,18 +86,15 @@ export class SetReminderModal extends Component {
                 <img id = 'reminderIcon' className = "icons" src={reminderIcon} alt={'reminder icon'} onClick={() => this.openModal()}></img>
                 <Modal
                     visible={this.state.visible}
-                    width="400"
-                    height="300"
+                    width="500"
+                    height="450"
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                 >
-                    <div>
-                        <h2>Set a time</h2>
-                        <br/>
-                        Enter a time to be a reminded: <input type="datetime-local" value = {this.state.time} name= "time" onChange = {this.handleInputChange}/> 
-                        <br/>
-                        Enter reminder thing: <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/> 
-                        <br/>
+                    <div class="form">
+                        <h2>Add Reminder</h2>
+                        <span>Title</span> <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/>
+                        <span>Reminder Time</span><input type="datetime-local" value = {this.state.time} name= "time" onChange = {this.handleInputChange}/>
                         <button type= "button" onClick = {this.handleSubmit}> Submit </button>
                     </div>
                 </Modal>
@@ -186,13 +183,10 @@ export class AddEventModal extends Component {
 
     renderAddForm() {
         return (
-            <div>
-                Event Name: <input type="text" name="eventName" value={this.state.eventName} onChange={this.handleInputChange} />
-                <br />
-                Start: <input type="datetime-local" name="startDate" value={this.state.startDate} onChange={this.handleInputChange} />
-                <br />
-                End: <input type="datetime-local" name="endDate" value={this.state.endDate} onChange={this.handleInputChange} />
-                <br />
+            <div class="form">
+                <span>Title</span> <input type="text" name="eventName" value={this.state.eventName} onChange={this.handleInputChange} />
+                <span>Start</span> <input type="datetime-local" name="startDate" value={this.state.startDate} onChange={this.handleInputChange} />
+                <span>End</span> <input type="datetime-local" name="endDate" value={this.state.endDate} onChange={this.handleInputChange} />
                 <button type="button" value=" Add New Event" onClick={this.handleSubmit}>Add Event</button>
             </div>
         );
@@ -200,17 +194,17 @@ export class AddEventModal extends Component {
 
     render() {
         return (
-            <section id="real-button">
+            <section>
                 <img id = 'addIcon' className = "icons" src={addIcon} alt={'add event icon'} onClick={() => this.openModal()}></img>
                 <Modal
                     visible={this.state.visible}
-                    width="400"
-                    height="300"
+                    width="500"
+                    height="550"
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                 >
-                    <div>
-                        <h2>Add An Event</h2>
+                    <div class="form">
+                        <h2>Add Event</h2>
                         {this.renderAddForm()}
                     </div>
                 </Modal>

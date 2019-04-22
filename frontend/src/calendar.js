@@ -182,20 +182,19 @@ class MyCalendar extends Component {
           {this.renderAddEvent()}
           {this.renderReminder()}
           {this.renderModal()}
-          <div id = "calendar-wrapper">
-            <div id="calendar">
-              {this.renderBigCalendar()}
-            </div>
-          </div>
-          <div id="weatherToday">
-            {this.renderWeatherModule()}
-          </div>
           <div id="other-content">
+            <div id="weatherToday">
+              {this.renderWeatherModule()}
+            </div>
             <div id="todayEvents">
               {this.renderTodaysEvents()}
             </div>
           </div>
-
+          <div id="calendar-wrapper">
+            <div id="calendar">
+              {this.renderBigCalendar()}
+            </div>
+          </div>
         </React.Fragment>
       );
     }
@@ -203,16 +202,18 @@ class MyCalendar extends Component {
       <React.Fragment>
         {this.renderAddEvent()}
         {this.renderReminder()}
-        <div id = "calendar-wrapper">
-            <div id="calendar">
-              {this.renderBigCalendar()}
-            </div>
-        </div>
-        <div id="weatherToday">
+        <div id="other-content">
+          <div id="weatherToday">
             {this.renderWeatherModule()}
-        </div>
-        <div id="todayEvents">
+          </div>
+          <div id="todayEvents">
             {this.renderTodaysEvents()}
+          </div>
+        </div>
+        <div id="calendar-wrapper">
+          <div id="calendar">
+            {this.renderBigCalendar()}
+          </div>
         </div>
       </React.Fragment>
     );

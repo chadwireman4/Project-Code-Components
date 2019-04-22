@@ -1,81 +1,73 @@
-/* fonts */
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans|Quicksand');
-
 /* animations */
 @keyframes fadeBackground{
-  from {background-color: white;}
-  to {background-color: black;}
+    from {background-color: white;}
+    to {background-color: black;}
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  background-color: white;
-  font-family: 'Quicksand', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    padding: 0;
+    background-color: #d9e9fb;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* The toggle for the themes */
 /* The switch - the box around the slider */
 #switch {
-  position: absolute;
-  top: 10px;
-  left: 80%;
-  width: 60px;
-  height: 34px;
+    position: absolute;
+    top: 10px;
+    left: 80%;
+    width: 60px;
+    height: 34px;
 }
 
 /* Hide default HTML checkbox */
 #switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
 
 /* The slider */
 .slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
 header {
-    background-color: #eee;
+    background-color: white;
     padding: 0;
     margin: 0;
     z-index: 1;
-    height: 50px;
-    margin-bottom: 30px;
+    height: 70px;
+    margin-bottom: 35px;
 }
 
 #logo {
     vertical-align: top;
     display: inline;
-    height: 50px;
-    width: 50px;
+    height: 70px;
+    width: 70px;
 }
 
 header h1 {
     display: inline-block;
-    padding: 7px 0 0 7px;
+    padding: 17px 0 0 17px;
     margin: 0;
 }
 
 header p {
-    padding: 0 10px 0 0;
-    display: inline;
-    float: right;
-}
-
-.el-checkbox {
-    padding: 12.203px 20px 0 0;
+    margin: 15px 0;
+    padding: 11px 10px 5px 0;
     display: inline;
     float: right;
 }
@@ -86,33 +78,38 @@ h2 {
     margin: 0;
 }
 
-#addIcon{
-  position: absolute;
-  left: 76%;
-  top: 5px;
+.el-checkbox {
+    padding: 22.203px 128px 0 0;
+    display: inline;
+    float: right;
+}
+
+#addIcon {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 0px;
+    right: 106px;
+}
+
+#reminderIcon {
+    position: absolute;
+    width: 35px;
+    height: 35px;
+    top: 0px;
+    right: 53px;
 }
 
 .icons {
-    height: 40px;
-    width: 40px;
+    height: 35px;
+    width: 35px;
     display: inline;
     float: right;
-    padding: 5px 10px 0 0;
+    padding: 17.5px 25px 5px 0;
 }
 
 .icons:hover {
     cursor: pointer;
-}
-
-/* the calender div */
-#calendar {
-    margin: 0 1% 0 2%;
-    float: left;
-    background-color: white;
-    left: 42%;
-    height: 600px;
-    width: 47%;
-    display: inline-block;
 }
 
 /* the add event form */
@@ -120,78 +117,123 @@ h2 {
     background-color: #e5e5e5;
 }
 
-#other-content {
-    float: left;
-    width: 47%;
-    margin: 0 2% 0 1%;
-}
-
-#reminderIcon{
-  position: absolute;
-  left: 80%;
-  top: 5px;
-}
-
 /* menu */
 .rectangle {
-  height: 8vh;
-  width: 100%;
-  background-color: rgb(55,120,168);
-  border-bottom: 2px solid black;
+    height: 8vh;
+    width: 100%;
+    background-color: rgb(55,120,168);
+    border-bottom: 2px solid black;
+}
+
+#other-content {
+    display: inline-block;
+    margin: 0 1.5% 0 3%;
+    width: 37%;
 }
 
 /* Weather Today*/
-#weatherToday{
-  position: absolute;
-  top: 9vh;
-  left: 0px;
-  height: 60vh;
-  width: 40vw;
-  background-color: rgb(217,233,250);
-  text-align: center;
+#weatherToday, #todayEvents {
+    background-color: white;
+    text-align: center;
+    height: 300px;
+    padding: 50px 7.5%;
+}
+
+/* current event form */
+#todayEvents {
+    margin-top: 30px;
 }
 
 /* the calender div */
-#calendar-wrapper{
-  background-color: white;
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  width: 60vw;
-  height: 90vh;
+#calendar {
+    background-color: white;
+    height: 730px;
 }
 
-#calendar{
-  background-color: white;
-  margin-top: 50px;
-  margin-left: 3%;
-  height: 500px;
-  width: 800px;
-}
-
-
-/* current event form */
-
-#todayEvents{
-  background-color: rgb(55,120,168);
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 40vw;
-  height: 45vh;
+#calendar-wrapper {
+    background-color: white;
+    vertical-align: top;
+    display: inline-block;
+    margin: 0 3% 0 1.5%;
+    padding: 50px 3%;
+    width: 48%;
 }
 
 /* DARK MODE */
 body.dark {
-    background-color: black;
+    background-color: #041426;
     /*color: #ddd;*/
     animation-name: fadeBackground;
-    animation-duration: .5s;
+    color: #eee;
 }
-/*
+
+body.dark h1,
+body.dark h2,
+body.dark h3 {
+    color: #eee;
+}
+
 header.dark {
-    background-color: #444;
-}*/
+    background-color: black;
+    color: #eee;
+}
+
+#calendar-wrapper.dark,
+#calendar.dark,
+#todayEvents.dark,
+#weatherToday.dark {
+    background-color: black;
+}
+
+.rbc-off-range-bg.dark {
+    background-color: #1a1a1a;
+    border-color: #222 !important;
+}
+
+.rbc-today.dark {
+    background-color: #000c15;
+}
+
+.rbc-day-bg.dark,
+.rbc-header.dark,
+.rbc-month-view.dark,
+.rbc-month-row.dark {
+    border-color: #222 !important;
+}
+
+#calendar-wrapper button.dark {
+    border-color: #333;
+    color: #c3c6c8;
+}
+
+#calendar-wrapper button.dark.rbc-active.dark,
+#calendar-wrapper button.dark:hover {
+    background-color: #191919 !important;
+    border-color: #525252;
+}
+
+#calendar-wrapper button.dark.rbc-active.dark:hover {
+    background-color: #252525 !important;
+}
+
+#root>section>div>div>div.dark {
+    background-color: black !important;
+}
+
+.form.dark input {
+    background-color: #333 !important;
+    color: #eee !important;
+}
+
+.rbc-event.dark {
+    background-color: #5295ce;
+    color: black !important;
+    font-weight: bold;
+}
+
+.rbc-event.dark:hover {
+    background-color: red/*#3c8fd6*/ !important;
+}
 
 /* animations */
 @keyframes fadeBackground {
@@ -201,11 +243,90 @@ header.dark {
 
 /* remove selecting capabilities where necessary */
 .no-select {
-  -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome and Opera */
+    -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+                -moz-user-select: none; /* Firefox */
+                    -ms-user-select: none; /* Internet Explorer/Edge */
+                        user-select: none; /* Non-prefixed version, currently
+                                              supported by Chrome and Opera */
+}
+
+.rbc-event {
+    border-radius: 0px !important;
+    font-weight: bold;
+}
+
+.form {
+    width: 400px;
+    margin: 30px auto;
+    font-weight: normal;
+}
+
+.form span {
+    display: block;
+    font-size: 17pt;
+    display: block;
+    width: 400px;
+    margin: 15px auto;
+}
+
+.form input {
+    display: block;
+    font-size: 15pt;
+    width: 380px;
+    height: 20px;
+    padding: 10px;
+    border: none;
+    background-color: #ddd;
+}
+
+.form h2 {
+    font-size: 30pt;
+    text-align: center;
+}
+
+.form button {
+    font-size: 15pt;
+    display: inline;
+    padding: 10px;
+    margin: 10px 0;
+    width: 180px;
+    float: right;
+    color: white;
+    border: 3px solid #37a;
+    background-color: #37a;
+}
+
+.form button:hover {
+    cursor: pointer;
+    background-color: #1164a2;
+    transition: .2s;
+    border: 3px solid #1164a2;
+    transition: background-color .2s, color .2s;
+}
+
+#delete {
+    float: left;
+    color: #a33;
+    border: 3px solid #a33;
+    background-color: white;
+}
+
+#delete:hover {
+    color: white;
+    background-color: #a33;
+    transition: background-color .2s, color .2s;
+}
+
+.rbc-event {
+    padding: 6px 4px !important;
+}
+
+.rbc-date-cell {
+    padding-bottom: 5px;
+}
+
+input:focus, button:focus, rbc-event:focus {
+    outline: 0 !important;
 }
