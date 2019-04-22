@@ -13,8 +13,8 @@
 
 const username = '';
 const password = '';
-const darkSkyAPI = '8fb83a7d4217dd055384e4333c3c5ae2';
-var current_user_id;
+const darkSkyAPI = '30968187ff395abadb3d0b894cb5307e';
+var current_user_id = 0; //this will change
 
 const express = require('express'); //Ensure our express framework has been added
 const path = require("path");
@@ -43,32 +43,13 @@ const dbConfig = {
 var db = pgp(dbConfig);
 
 //testing
-
 app.get('/test', (req, res) => { 
-	res.send({"express": "hello from express"});
-
-app._router.stack.forEach(function(r){
-  if (r.route && r.route.path){
-    console.log(r.route.path)
-  }
-})
-
+    app._router.stack.forEach(function(r){
+        if (r.route && r.route.path){
+            console.log(r.route.path)
+        }
+    })
 });
-
-//convert this to something that the calendar can read
-function convertEvents(a){
-	var eventList = [];
-	a.forEach( i => {
-		eventList.push({
-			'title' : i.eventname,
-			'start' : new Date(i.startdate),
-			'end' : new Date(i.enddate),
-			id : i.id
-		})
-	})
-	//console.table(eventList);
-	return eventList;
-}
 
 //SERVE UP THE Login and Registration Pages!!
 request(`https://api.darksky.net/forecast/${darkSkyAPI}/40.0150,105.2705`, function (error, response, body) {
@@ -78,7 +59,6 @@ request(`https://api.darksky.net/forecast/${darkSkyAPI}/40.0150,105.2705`, funct
 			res.send(b.currently)
 		})
     }
-    
 });
 
 //for the email API --> using mailjet package 
@@ -122,6 +102,7 @@ app.post('/api/email', (req, res) => {
 //serve up the pages
 
 app.get('/', (req, res) => {
+    console.log("Current user id is: ", current_user_id);
 	res.sendFile(path.join(__dirname, '/public/user-log-in.html'));
 });
 
@@ -166,9 +147,6 @@ app.post('/', (req, res) => {
 
 //icons for page
 app.get('/micromanage.svg', (req, res) => { res.sendFile(path.join(__dirname, '/public/micromanage.svg')) });
-
-
-
 
 //display the events
 app.get('/api/display-events-for-user', (req,res) => {
@@ -270,17 +248,13 @@ app.get('/api/validated',(req,res) => {
     //Returns true or false.
     console.log("Fetching user id with email..");
 
-    
     var email = req.query.user_email;
-    email = 'abc@gmail.com';
     console.log("email:" + email );
 
     var query_statement = `SELECT id FROM users WHERE user_email = '${email}';`;
-
-
     db.one(query_statement)
     .then( data => {
-        console.log("Database queried successfully...");
+        console.log("Database queried successfully... User Id: ", data.id);
         current_user_id = data.id;
         res.send({ 
             message:"Success",
@@ -294,7 +268,7 @@ app.get('/api/validated',(req,res) => {
 
 
 
-app.get('api/add-user',(req,res) => {
+app.get('/api/add-user',(req,res) => {
     //Adds User to user table
     console.log("Adding User.");
     var name = req.body.user_name;
@@ -316,23 +290,17 @@ app.get('api/add-user',(req,res) => {
 
 
 
-app.get('/api/add-appointment',(req,res) =>{
+app.post('/api/add-appointment',(req,res) =>{
     //Requires user_id from front end
     //Adds appointment to appointments table
     console.log("Adding Event.");
-    var name = req.query.event_name;
-    var length = req.query.event_length;
-    var start = req.query.event_start_time;
-    var end = req.query.event_end_time;
-    var urg = req.query.event_urgency;
-    var color = req.query.event_color;
-    user_id='1';
-    name = '';
-    length = '';
-    start = '';
-    end = '';
-    color = '';
-
+    var name = req.body.event_name;
+    var length = req.body.event_length;
+    var start = req.body.event_start_time;
+    var end = req.body.event_end_time;
+    var urg = req.body.event_urgency;
+    var color = "none";
+    console.log(`${start} , ${end} , ${length}, ${name}, ${urg}`);
 
     var query_statement = `INSERT INTO appointments (
     user_id , 
@@ -345,7 +313,7 @@ app.get('/api/add-appointment',(req,res) =>{
     VALUES ( 
         (SELECT id FROM users WHERE id = '${+current_user_id}'),
         '${ name }' ,
-        '${ length }' , 
+        '${ length } hour(s)' , 
         '${ start }' ,
         '${ end }' ,
         '${ urg }' ,
@@ -354,16 +322,15 @@ app.get('/api/add-appointment',(req,res) =>{
 
         db.none(query_statement)
         .then( () => {
-            console.log("Success");
+            res.send({status: 'success'});
         })
         .catch( err => {
             console.log("Error: " + err );
         });
 });
 
-app.get('api/delete-user', (req,res) => {
+app.get('/api/delete-user', (req,res) => {
     console.log("Deleting user.");
-
 
     var name_of_user = req.body.name_of_user;
     var password = req.body.password;
@@ -383,103 +350,43 @@ app.get('api/delete-user', (req,res) => {
     });
 });
 
-app.get('api/delete-event', (req,res) =>{
+app.get('/api/delete-event', (req,res) =>{
     console.log("Deleting event.");
-
-    var event_name = req.body.event_name;
-    
-
+    var event_name = req.query.event_name;
     var query_statement = `DELETE FROM ONLY 
     appointments WHERE user_id = '${+current_user_id}' AND event_name = '${event_name}';`;
 
     db.none(query_statement)
     .then( () => {
         console.log("Database queried successfully...");
+        res.send({status: "success"});
     })
     .catch( err => {
-        coneole.log("Error: " + err);
+        console.log("Error: " + err);
     });
 
 });
 
-
-app.get('api/delete-event',(req,res) =>{
-    //Requires user_id from front end
-    //Deletes appointment
-    console.log("Deleting Event.");
-
-    var name = req.body.event_name;
-
-
-    var query_statement = `DELETE FROM ONLY 
-    appointments WHERE user_id = '${+current_user_id}' AND event_name = '${name}';`;
-
-
-        db.none(query_statement)
-        .then( () => {
-            console.log("Success");
-        })
-        .catch( err => {
-            console.log("Error: " + err );
-        });
-});
-
-app.get('api/edit-event-name',(req,res) =>{
-    //Requires user_id from front end
-    var name = req.body.event_name;
-    var newName = req.body.new_event_name;
+app.get('/api/edit-event-details', (req,res) =>{
+    var id = req.query.id;
+    var name = req.query.name;
+    var start = req.query.start;
+    var end = req.query.end;
+    var length = req.query.length;
     var query_statement = `UPDATE only appointments 
-	SET event_name = '${newName}'
+	SET event_name = '${name}', event_start_time = '${start}', event_end_time = '${end}', event_length = '${length} hour(s)'
 	WHERE user_id = '${+current_user_id}' 
-	AND event_name = '${name}';`;
+    AND event_id = '${id}';`;
     db.none(query_statement)
     .then( () => {
-        console.log("Success");
+        res.send({status : "success"});
     })
     .catch( err => {
         console.log("Error: " + err );
     });
-});
+})
 
-app.get('api/edit-event-start-time',(req,res) =>{
-    //Requires user_id from front end
-    var name = req.body.event_name;
-    var new_start_time = req.body.new_start_time;
-
-    var query_statement = `UPDATE only appointments 
-	SET event_start_time = '${new_start_time}'
-	WHERE user_id = '${+current_user_id}' 
-	AND event_name = '${name}';`;
-
-    db.none(query_statement)
-    .then( () => {
-        console.log("Success");
-    })
-    .catch( err => {
-        console.log("Error: " + err );
-    });
-});
-
-app.get('api/edit-event-end-time',(req,res) =>{
-    //Requires user_id from front end
-    var name = req.body.event_name;
-    var new_end_time = req.body.new_end_time;
-
-    var query_statement = `UPDATE only appointments 
-	SET event_end_time = '${new_end_time}'
-	WHERE user_id = '${+current_user_id}' 
-	AND event_name = '${name}';`;
-
-    db.none(query_statement)
-    .then( () => {
-        console.log("Success");
-    })
-    .catch( err => {
-        console.log("Error: " + err );
-    });
-});
-
-app.get('api/edit-event-color',(req,res) =>{
+app.get('/api/edit-event-color',(req,res) =>{
     //Requires user_id from front end
   
     var name = req.body.event_name;
@@ -499,7 +406,7 @@ app.get('api/edit-event-color',(req,res) =>{
     });
 });
 
-app.get('api/edit-user-password',(req,res) =>{
+app.get('/api/edit-user-password',(req,res) =>{
     //Requires user_id from front end
    
     var name = req.body.user_name;
@@ -520,7 +427,7 @@ app.get('api/edit-user-password',(req,res) =>{
 });
 
 
-app.get('api/edit-user-email',(req,res) =>{
+app.get('/api/edit-user-email',(req,res) =>{
     //Requires user_id from front end
     var name = req.body.user_name;
     var new_user_email = req.body.new_user_email;
@@ -539,7 +446,7 @@ app.get('api/edit-user-email',(req,res) =>{
     });
 });
 
-app.get('api/edit-user-name',(req,res) =>{
+app.get('/api/edit-user-name',(req,res) =>{
     //Requires user_id from front end
     var password = req.body.user_password;
     var new_user_name = req.body.new_user_name;
@@ -556,6 +463,11 @@ app.get('api/edit-user-name',(req,res) =>{
     .catch( err => {
         console.log("Error: " + err );
     });
+});
+
+app.get('/api/logout',(req,res) => {
+    current_user_id = 0;
+    res.send({'status' : 'success'});
 });
 
 app.listen(port, () => console.log(`App is listening on port ${port}!`));

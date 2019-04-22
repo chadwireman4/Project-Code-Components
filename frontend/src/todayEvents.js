@@ -10,9 +10,10 @@ class DayEvents extends Component {
                     {this.props.eventList.map((item) => (
                         <tbody key={item.id}>
                             <tr>
-                                <th>Name:</th><td>{item.title}</td>
-                                <th>Start:</th><td> {new Date(item.start).toLocaleTimeString()} </td>
-                                <th>End:</th><td>{new Date(item.end).toLocaleTimeString()}</td>
+                                <th>Name:</th><td>{item.event_name}</td>
+                                <th>Start:</th><td> {new Date(item.event_start_time).toLocaleTimeString()} </td>
+                                <th>Length:</th><td>{item.event_length}</td>
+                                <th>Urgency:</th><td>{item.event_urgency}</td>
                             </tr>
                         </tbody>
                     ))}

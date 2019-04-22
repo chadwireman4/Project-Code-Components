@@ -96,7 +96,7 @@ export class SetReminderModal extends Component {
                         <br/>
                         Enter a time to be a reminded: <input type="datetime-local" value = {this.state.time} name= "time" onChange = {this.handleInputChange}/> 
                         <br/>
-                        Enter reminder thing: <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/> 
+                        Enter a reminder message: <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/> 
                         <br/>
                         <button type= "button" onClick = {this.handleSubmit}> Submit </button>
                     </div>
@@ -118,6 +118,7 @@ export class AddEventModal extends Component {
             startDate: "",
             endDate: "",
             id:[],
+            urg : 0,
             eventList :[]
         }
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -150,33 +151,44 @@ export class AddEventModal extends Component {
     //add a new event into the DB
     //first we check that the user input was valid
     //then we turn the strings into something the DB can read
-    //also increment the ID
     //sending the data object after turning it into JSON
     handleSubmit = (event) => {
         event.preventDefault();
         //error check for empty fields -- they must all be filled out
+        var lengthOfEvent = Math.abs(new Date(this.state.endDate).getTime() - new Date(this.state.startDate).getTime())/3600000;
+        if(lengthOfEvent <= 0) return; 
         if (this.state.eventName === "") return;
         if (this.isValidDate(new Date(this.state.startDate)) === false) return;
         if(this.isValidDate(new Date(this.state.endDate)) === false) return;
         //passed all of the checks
-        var newId = this.props.id[0].max;
         var data = {
-            name: this.state.eventName,
-            start: this.state.startDate.replace('T',' '),
-            end: this.state.endDate.replace('T',' '),
-            id: ++newId
+            event_name: this.state.eventName,
+            event_start_time: this.state.startDate.replace('T',' '),
+            event_end_time: this.state.endDate.replace('T',' '),
+            event_urgency:this.state.urg,
+            event_length: lengthOfEvent
         }
-        //lift state up to update the calendar
-        fetch('/api/add', {
-            method: 'POST', // or 'PUT'
+        console.table(data);
+        //add it into the DB
+        fetch('/api/add-appointment', {
+            method: 'POST', 
             body: JSON.stringify(data), // data can be `string` or {object}!
             headers:{
               'Content-Type': 'application/json'
-            }
-          })
-          .then(res => res.json())
-          .then(res => this.props.onAddEvent(res.data, res.id))
-          .catch(e => console.log(e))
+            }})
+            .then(res => res.json())
+            .then(res => {
+                if(res.status === 'success'){
+                    fetch('/api/display-events-for-user')
+                    .then(res => res.json())
+                    .then(res => this.props.onAddEvent(res.data, res.todaysEvents)) //send back the updated event list
+                    .catch(e => console.log(e));
+                }
+                else{
+                    console.log("error updating data in DB");
+                }
+            })
+            .catch(e => console.log(e));
 
         this.closeModal();
         window.location.reload(); //force page to reload
@@ -193,6 +205,8 @@ export class AddEventModal extends Component {
                 <br />
                 End: <input type="datetime-local" name="endDate" value={this.state.endDate} onChange={this.handleInputChange} />
                 <br />
+                Urgency: <input type="number" name="urg" min = "0" max = "10" value={this.state.urg} onChange={this.handleInputChange} />
+                <br/>
                 <button type="button" value=" Add New Event" onClick={this.handleSubmit}>Add Event</button>
             </div>
         );

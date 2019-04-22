@@ -41,7 +41,6 @@ class MyCalendar extends Component {
       nameToUpdate: 'Event Name',
       idToUpdate: '',
       clicked: false,
-      id: [],
       myEventsList: [{
         'title' : 'testing',
         'start' : new Date(2019, 3, 9),
@@ -55,18 +54,18 @@ class MyCalendar extends Component {
     this.toggle = this.toggle.bind(this);
     this.add = this.add.bind(this);
     this.getID = this.getID.bind(this);
+    this.convertToCalendarFormat = this.convertToCalendarFormat.bind(this);
   }
 
   componentDidMount() {
     //lets get the data in the db
-    fetch('/api')
+    fetch('/api/display-events-for-user')
     .then(res => res.json())
     .then(res => this.setState({
-      myEventsList: convertToCalendarFormat(res.result), //turn date strings into date objects
-      todaysEvents: res.today,
-      id : res.id
+      myEventsList : this.convertToCalendarFormat(res.data),
+      todaysEvents : res.todaysEvents
     }))
-    .catch(err => console.log(err)); 
+    .catch(err => console.log(err));
   }
 
   //toggling for the modal
@@ -75,30 +74,30 @@ class MyCalendar extends Component {
   }
 
   //updating the event given the start,end, and name of event
-  update(updatedEvents) {
+  update(updatedEvents, updatedTodaysEvents) {
     console.log("updated");
     console.log("new event list is: ", updatedEvents);
-    this.setState({ myEventsList: updatedEvents });
+    this.setState({ myEventsList: updatedEvents, todaysEvents: updatedTodaysEvents });
   }
 
   //updatng state
-  add(newEvent, newId) {
-    console.log("new event is: ", newEvent);
-    console.log("new id: ", newId);
+  add(newEvent, updatedTodaysEvents) {
+    console.log("new event List is is: ", newEvent);
     this.setState({
       myEventsList: newEvent,
-      id: newId
+      todaysEvents : updatedTodaysEvents 
     });
   }
 
   //our own method to get the id of a name of an item
   getID(indexToFind) {
     var index;
-    this.state.myEventsList.forEach(i => {
-      if (i.title === indexToFind) {
+    this.state.myEventsList.forEach( i => {
+      if(i.title === indexToFind){
         index = i.id;
       }
-    })
+    });
+    console.log(index);
     if (typeof index !== "undefined") return index;
     else return -1;
   }
@@ -108,13 +107,25 @@ class MyCalendar extends Component {
   //it down to the task module child via props
   //get the selected id so we can edit or delete it
   handleSelectSlot = (slotInfo) => {
-    var t =new Date (slotInfo.start)
-    console.log(slotInfo.title);
-    console.log(t.toLocaleDateString());
     this.setState({idToUpdate : this.getID(slotInfo.title)});
     this.setState({nameToUpdate: slotInfo.title});
-    //alert(`Event: ${slotInfo.title} Starts at: ${slotInfo.start} and is: ${typeof slotInfo.start}`);
     !this.state.clicked ? this.setState({ clicked: true }) : this.setState({ clicked: false });
+  }
+
+  //convert the events
+  convertToCalendarFormat(a){
+    console.table(a);
+    var eventList = [];
+    a.forEach( i => {
+      eventList.push({
+        'title' : i.event_name,
+        'start' : new Date(i.event_start_time),
+        'end' : new Date(i.event_end_time),
+        id : i.event_id
+      })
+    })
+    console.table(eventList);
+    return eventList;
   }
 
   //this will render the calendat to the screen
@@ -142,8 +153,7 @@ class MyCalendar extends Component {
       //pass props to child
       <MyModal toggle={this.state.clicked}
         onToggle={this.toggle}
-        onEdit={this.update}
-        onDelete={this.update}
+        onUpdate={this.update}
         index = {this.state.idToUpdate}
         selectedName = {this.state.nameToUpdate}
       />
@@ -152,7 +162,7 @@ class MyCalendar extends Component {
 
   renderAddEvent() {
     return (
-      <AddEventModal id={this.state.id} onAddEvent={this.add} />
+      <AddEventModal onAddEvent={this.add} />
     )
   }
 
@@ -220,17 +230,5 @@ class MyCalendar extends Component {
   }
 }
 
-function 	convertToCalendarFormat(a){
-  var eventList = [];
-  a.forEach( i => {
-    eventList.push({
-      'title' : i.title,
-      'start' : new Date(i.start),
-      'end' : new Date(i.end),
-      id : i.id
-    })
-  })
-  return eventList;
-}
 
 export default MyCalendar;
