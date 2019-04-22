@@ -35,15 +35,64 @@
                     }
                 })
                 .catch(e => console.log(e))
-            }
 
             if (checkBox != null) {
                 document.getElementById('dark-check').onclick = function() {
                     document.getElementsByTagName('body')[0].classList.toggle('dark');
                     document.getElementsByTagName('header')[0].classList.toggle('dark');
+                    document.getElementById('calendar-wrapper').classList.toggle('dark');
+                    document.getElementById('calendar').classList.toggle('dark');
+                    document.getElementById('weatherToday').classList.toggle('dark');
+                    document.getElementById('todayEvents').classList.toggle('dark');
+                    document.getElementsByClassName('form')[0].getElementsByClassName('form')[0].classList.toggle('dark');
+                    document.getElementsByClassName('form')[2].classList.toggle('dark');
+                    document.getElementById('root').getElementsByTagName('section')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[0].classList.toggle('dark');
+                    document.getElementById('root').getElementsByTagName('section')[1].getElementsByTagName('div')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[0].classList.toggle('dark');
+                    document.getElementById('root').getElementsByTagName('section')[0].getElementsByTagName('div')[0].getElementsByTagName('div')[0].classList.toggle('dark');
+                    document.getElementById('root').getElementsByTagName('section')[1].getElementsByTagName('div')[0].getElementsByTagName('div')[0].classList.toggle('dark');
+
+                    let dayBg = document.getElementsByClassName('rbc-day-bg');
+                    let header = document.getElementsByClassName('rbc-header');
+                    let monthView = document.getElementsByClassName('rbc-month-view');
+                    let monthRow = document.getElementsByClassName('rbc-month-row');
+                    let button = document.getElementById('calendar-wrapper').getElementsByTagName('button');
+
+                    for (let i = 0; i < dayBg.length; i++) {
+                        dayBg[i].classList.toggle('dark');
+                    }
+
+                    for (let i = 0; i < header.length; i++) {
+                        header[i].classList.toggle('dark');
+                    }
+
+                    for (let i = 0; i < monthView.length; i++) {
+                        monthView[i].classList.toggle('dark');
+                    }
+
+                    for (let i = 0; i < monthRow.length; i++) {
+                        monthRow[i].classList.toggle('dark');
+                    }
+
+                    for (let i = 0; i < button.length; i++) {
+                        button[i].classList.toggle('dark');
+                    }
+
+                    if (document.getElementsByTagName('body')[0].classList.contains('dark')) {
+                        document.getElementById('addIcon').src = "icon-add-dark.svg"
+                        document.getElementById('reminderIcon').src = "icon-reminder-dark.svg"
+                        document.getElementById('logout').src = "icon-logout-dark.svg"
+                        document.getElementById('logo').src = "micromanage-dark.svg"
+                    } else {
+                        document.getElementById('addIcon').src = "icon-add.svg"
+                        document.getElementById('reminderIcon').src = "icon-reminder.svg"
+                        document.getElementById('logout').src = "icon-logout.svg"
+                        document.getElementById('logo').src = "micromanage.svg"
+                    }
                 };
             }
-        }
+        
+        }    
+    }
     </script>
     </header>
     <div id="root"></div>

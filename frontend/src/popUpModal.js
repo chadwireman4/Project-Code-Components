@@ -34,12 +34,12 @@ class MyModal extends Component {
     //handle user input and update state
     renderEditForm() {
         return (
-            <div>
-                Event Name:<br />
-                <input type="text" placeholder = {this.props.selectedName} name = "updateName" value={this.state.updateName} onChange = {this.handleInputChange}/><br />
-                Start Time:<br />
-                <input type="datetime-local" name = "updateStart" value={this.state.updateStart} onChange = {this.handleInputChange}/><br />
-                End Time:<br />
+            <div class="form">
+                <span>Event Title</span>
+                <input type="text" name = "updateName" value={this.state.updateName} onChange = {this.handleInputChange}/>
+                <span>Start Time</span>
+                <input type="datetime-local" name = "updateStart" value={this.state.updateStart} onChange = {this.handleInputChange}/>
+                <span>End Time</span>
                 <input type="datetime-local" name = "updateEnd" value={this.state.updateEnd} onChange = {this.handleInputChange}/>
             </div>
         );
@@ -118,16 +118,15 @@ class MyModal extends Component {
             <section>
                 <Modal
                     visible={this.props.toggle} //this changes based on what the calender event is
-                    width="400"
-                    height="300"
+                    width="500"
+                    height="590"
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}>
-                    <div>
-                        <h1>Event Details</h1>
-                        <p>Update or Delete event??</p>
+                    <div class="form">
+                        <h2>Event Details</h2>
                         {this.renderEditForm()}
                         <button onClick={() => this.editModal()}>Edit</button>
-                        <button onClick={() => this.deleteModal()}>Delete</button>
+                        <button id="delete" onClick={() => this.deleteModal()}>Delete</button>
                     </div>
                 </Modal>
             </section>
