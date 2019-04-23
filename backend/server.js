@@ -11,8 +11,8 @@
 
 ***********************/
 
-const username = '';
-const password = '';
+const username = 'e5aa565bd39f8a0f6abbfbc4a971b757';
+const password = '9765c52b455001784121034a200712b8';
 const darkSkyAPI = '30968187ff395abadb3d0b894cb5307e';
 var current_user_id = 0; //this will change
 
@@ -82,9 +82,9 @@ app.post('/api/email', (req, res) => {
 							"Name": "You, a productive Individual"
 						}
 					],
-					"Subject": `Time to get working on ${name}`,
+					"Subject": `Time to get working on your task!`,
 					"TextPart": "A Reminder from MicroManage!",
-					"HTMLPart": "<h3> Time to get your shit together </h3>"
+					"HTMLPart": `<h3> ${name} </h3>`
 				}
 			]
 		});
@@ -158,14 +158,18 @@ app.get('/api/display-events-for-user', (req,res) => {
   db.task('get-everything', task => {
     return task.batch([
                 task.any(query),
-                task.any(query_two)
+                task.any(query_two),
+                task.any(`SELECT user_name FROM USERS WHERE id = ${+current_user_id}`),
+                task.any(`SELECT user_email FROM USERS WHERE id = ${+current_user_id}`)
     ]);
 	})
 	.then(data =>{
     //success
     	res.send({
                 data: data[0],
-                todaysEvents: data[1]
+                todaysEvents: data[1],
+                name : data[2],
+                email: data[3]
     	});
     	console.log("Sent events, success");
 
@@ -176,6 +180,7 @@ app.get('/api/display-events-for-user', (req,res) => {
 	});
 });
 
+//Creating a new User Account
 app.post('/api/check-user',(req,res) => {
     //Checks if user-name OR email is in db
     //Returns true or false.
@@ -191,22 +196,26 @@ app.post('/api/check-user',(req,res) => {
     var query_statement_two = `INSERT INTO users(user_name , user_password,
         user_email) VALUES('${name}', '${password}', '${email}');`;
     var query_statement_three = `SELECT id FROM users WHERE user_email = '${email}'`;
-    
     db.one(query_statement)
     .then( data => {
-        console.log("Database queried successfully in chec user...");
+        console.log("Database queried successfully in check user...");
         console.log(data.exists);
         if(!data.exists){
-            console.log(data.exists);
-            db.none(query_statement_two);
-            db.one(query_statement_three)
-            .then(data =>{
-                console.log("New User ID: " + data.id);
-                current_user_id = data.id;
+            db.none(query_statement_two)
+            .then( () => {
+                db.one(query_statement_three)
+                .then(data =>{
+                    console.log("New User ID: " + data.id);
+                    current_user_id = data.id;
+                })
+                .catch(er => console.log(er) );  
+                res.redirect('http://localhost:3000'); //successfully added a new User
             })
-            .catch(er => console.log(er) );
-            
-            res.redirect('http://localhost:3000');
+            .catch(e => console.log(e));
+        }
+        else{
+            console.log("user already exists");
+            res.redirect('/registration');
         }
     })
     .catch( err => {

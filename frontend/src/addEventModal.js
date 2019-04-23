@@ -47,9 +47,7 @@ export class SetReminderModal extends Component {
         this.closeModal();
     }
     setReminder(){
-        var name = this.state.taskName;
         var time = this.state.time;
-        var email = this.props.email;
         var countDownDate = new Date(time).getTime();
         console.log(`time is: ${time} and countDown is: ${countDownDate}`);
 
@@ -58,24 +56,27 @@ export class SetReminderModal extends Component {
         var now = new Date().getTime();
         // Find the distance between now and the count down date
         var distance = countDownDate - now;
+        if(distance <= 0){
+            alert("Please enter a future time");
+            return;
+        }
         var data = {
-            name: name,
-            email: email, //this.props.email
+            name: this.props.taskName,
+            email: this.props.email
         }
         if (distance < 0) {
             clearInterval(x);
-            alert("time is up");
-            //the post request here
+            console.log("time is up...sending email");
+            //Sending the email out
             fetch('/api/email', {
-                method: 'POST', // or 'PUT'
-                body: JSON.stringify(data), // data can be `string` or {object}!
+                method: 'POST',
+                body: JSON.stringify(data),
                 headers:{
                   'Content-Type': 'application/json'
                 }
-              })
-              .then(res => res.json())
-              .then(res => this.props.onAddEvent(res.data, res.id))
-              .catch(e => console.log(e))
+            })
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
         }
         }, 1000);
     }
@@ -91,7 +92,7 @@ export class SetReminderModal extends Component {
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                 >
-                    <div class="form">
+                    <div className="form">
                         <h2>Add Reminder</h2>
                         <span>Title</span> <input type="text" value = {this.state.taskName} name= "taskName" onChange = {this.handleInputChange}/>
                         <span>Reminder Time</span><input type="datetime-local" value = {this.state.time} name= "time" onChange = {this.handleInputChange}/>
@@ -195,7 +196,7 @@ export class AddEventModal extends Component {
 
     renderAddForm() {
         return (
-            <div class="form">
+            <div className="form">
                 <span>Title</span> <input type="text" name="eventName" value={this.state.eventName} onChange={this.handleInputChange} />
                 <span>Start</span> <input type="datetime-local" name="startDate" value={this.state.startDate} onChange={this.handleInputChange} />
                 <span>End</span> <input type="datetime-local" name="endDate" value={this.state.endDate} onChange={this.handleInputChange} />
@@ -216,7 +217,7 @@ export class AddEventModal extends Component {
                     effect="fadeInUp"
                     onClickAway={() => this.closeModal()}
                 >
-                    <div class="form">
+                    <div className="form">
                         <h2>Add Event</h2>
                         {this.renderAddForm()}
                     </div>

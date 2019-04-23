@@ -32,8 +32,6 @@ import WeatherModule from './weatherModule';
 moment.locale('en-GB');
 const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
-//date object for JS used => date(year, month, day, hours, min ); //start at 0
-
 class MyCalendar extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +45,8 @@ class MyCalendar extends Component {
         'end' : new Date(2019, 3, 9)
       }],
       todaysEvents:[],
-      email : 'origamiguru98@gmail.com'
+      userName : '',
+      email: ''
     }
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.update = this.update.bind(this);
@@ -58,13 +57,17 @@ class MyCalendar extends Component {
   }
 
   componentDidMount() {
-    //lets get the data in the db
+    //Get all of the needed data from the DB
     fetch('/api/display-events-for-user')
     .then(res => res.json())
-    .then(res => this.setState({
-      myEventsList : this.convertToCalendarFormat(res.data),
-      todaysEvents : res.todaysEvents
+    .then(res =>
+      this.setState({
+        myEventsList : this.convertToCalendarFormat(res.data),
+        todaysEvents : res.todaysEvents,
+        userName : res.name[0].user_name,
+        email: res.email[0].user_email
     }))
+    .then (() => this.props.setName(this.state.userName))
     .catch(err => console.log(err));
   }
 
@@ -89,7 +92,7 @@ class MyCalendar extends Component {
     });
   }
 
-  //our own method to get the id of a name of an item
+  //our own method to get the event_id of a selected event
   getID(indexToFind) {
     var index;
     this.state.myEventsList.forEach( i => {

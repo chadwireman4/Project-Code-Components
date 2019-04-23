@@ -5,16 +5,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="theme-color" content="#000000" />
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
-    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
-    <!-- <script src="./myLib.js"></script> -->
+    <link rel="shortcut icon" type="image/x-icon" href="./micro-mu.ico" />
 </head>
 <body>
     <header class="no-select">
     <img id='logo' src="micromanage.svg" alt="micro manage logo">
     <h1>MicroManage</h1>
-    <img id = 'logout' class="icons" src="icon-logout.svg" alt='log out icon'>
-    <!-- <img id="addIcon" class="icons" src="icon-add.svg" alt='log out icon'> -->
+    <img class="icons" id="logout" src="icon-logout.svg" alt='log out icon'>
     <div class="el-checkbox">
         <label class="el-switch">
             <input id="dark-check" type="checkbox" name="switch">
@@ -24,7 +21,7 @@
     <p><b>Dark Mode<b></p>
     <script type="text/javascript">
         window.onload = function(){
-            let checkBox = document.getElementById('dark-check');
+            var checkBox = document.getElementById('dark-check');
             var logOut = document.getElementById('logout');
             logOut.onclick = function(){
                 fetch('/api/logout')
@@ -35,6 +32,7 @@
                     }
                 })
                 .catch(e => console.log(e))
+            }
 
             if (checkBox != null) {
                 document.getElementById('dark-check').onclick = function() {
@@ -92,7 +90,6 @@
             }
         
         }    
-    }
     </script>
     </header>
     <div id="root"></div>
