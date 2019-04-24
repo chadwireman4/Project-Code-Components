@@ -7,7 +7,7 @@ To run:
 
 1) npm install -g nodemon
 2) CD into frontend and do npm install
-3) CD into backend and do npm install
+3) CD into backend and do npm install bcrypt
 4) download and set up the micro-manage-db
 5) make sure to add the new user so the pg-promise works (in the slack)
 6) do npm start on both frontend and backend
