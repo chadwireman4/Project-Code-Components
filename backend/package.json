@@ -4,8 +4,9 @@
   "description": "backend for calendar app with express",
   "main": "server.js",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
-    "express": "latest",
+    "express": "^4.16.4",
     "node-mailjet": "^3.3.1",
     "pg-promise": "^8.6.4",
     "request": "^2.88.0"

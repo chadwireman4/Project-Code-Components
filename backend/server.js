@@ -20,6 +20,7 @@ const express = require('express'); //Ensure our express framework has been adde
 const path = require("path");
 const request = require('request');
 const mailjet = require('node-mailjet').connect(username, password);
+const bcrypt = require('bcrypt');
 var app = express();
 var bodyParser = require('body-parser'); //Ensure our body-parser tool has been added
 app.use(bodyParser.json());              // support json encoded bodies
@@ -125,22 +126,54 @@ app.post('/', (req, res) => {
     console.log("Password:" + password);
     console.log("Email:" + email );
 
-    var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_email = '${email}' AND user_password ='${password}' );`;
+    var query_exists = `SELECT EXISTS(SELECT user_email FROM users WHERE user_email = '${email}');`
+    var query_statement = `SELECT user_email, user_password FROM users WHERE user_email = '${email}';`;
 
-
-    db.one(query_statement)
-    .then( data => {
-        console.log("Database queried successfully...");
-        console.log(data.exists);
-        res.send({
-            data:data.exists,
-            message:"Success",
+    db.one(query_exists)
+    .then(uname => {
+      if (uname.exists) {
+        db.any(query_statement)
+        .then( data => {
+            console.log("Password hash:", data[0].user_password);
+            console.log("Database queried successfully...");
+            console.log(bcrypt.compareSync(password, data[0].user_password));
+            res.send({
+                data:bcrypt.compareSync(password, data[0].user_password),
+                message:"Success",
+            });
+            res.end();
+        })
+        .catch( err => {
+            console.log("Error: " + err );
         });
-        res.end();
+      }
+      else {
+      console.log("invalid email or password");
+      res.send({
+                data:uname.exists,
+                message:"Failed",
+            });
+            res.end();
+      }
     })
     .catch( err => {
-        console.log("Error: " + err );
-    });
+      console.log("Error: " + err );
+    }); 
+    /*
+  db.any(query_exists)
+        .then( data => {
+            console.log("Database queried successfully...");
+            console.log(data.exists);
+            res.send({
+                data:data.exists,
+                message:"Success",
+            });
+            res.end();
+        })
+        .catch( err => {
+            console.log("Error: " + err );
+        });
+        */
 });
 
 
@@ -189,12 +222,13 @@ app.post('/api/check-user',(req,res) => {
     var name = req.body.Username;
 	var email = req.body.Email;
 	var password = req.body.Password;
+  var pass_hash = bcrypt.hashSync(password, 5);
     
     console.log("Email:" + email );
 
     var query_statement = `SELECT EXISTS(SELECT 1 FROM users WHERE user_email = '${ email }');`;
     var query_statement_two = `INSERT INTO users(user_name , user_password,
-        user_email) VALUES('${name}', '${password}', '${email}');`;
+        user_email) VALUES('${name}', '${pass_hash}', '${email}');`;
     var query_statement_three = `SELECT id FROM users WHERE user_email = '${email}'`;
     db.one(query_statement)
     .then( data => {
@@ -231,6 +265,7 @@ app.get('/api/login-check',(req,res) => {
 
     var password = req.query.user_password;
     var email = req.query.user_email;
+    var pass_hash = bcrypt.hashSync(password, 5);
 
     console.log("Password: " + password);
     console.log("email:" + email );
