@@ -158,22 +158,7 @@ app.post('/', (req, res) => {
     })
     .catch( err => {
       console.log("Error: " + err );
-    }); 
-    /*
-  db.any(query_exists)
-        .then( data => {
-            console.log("Database queried successfully...");
-            console.log(data.exists);
-            res.send({
-                data:data.exists,
-                message:"Success",
-            });
-            res.end();
-        })
-        .catch( err => {
-            console.log("Error: " + err );
-        });
-        */
+    });
 });
 
 
