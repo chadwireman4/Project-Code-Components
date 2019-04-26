@@ -8,7 +8,7 @@ Client side code written in React.js
 <h2>Overview of MicroManage &mu;</h2>
   <h3>What Does MicroManage do?</h3>
     MicroManage&mu; is a scheduling service which combines an
-      intuitive and minimilast UI to a Postgres database which allows
+      intuitive and minimilast user interface to a database which allows
       users to plan out their days, weeks, months, and years. <br>
 
     
