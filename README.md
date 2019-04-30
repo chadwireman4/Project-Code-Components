@@ -21,9 +21,13 @@ Client side code written in React.js
   </ul>
   
 <h1>How to run</h1>
+```
 npm install
--make sure a node modules folder appears 
 npm start
+``` 
+<br>
+-make sure a node modules folder appears  <br>
+
 
 
 
