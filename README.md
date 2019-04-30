@@ -21,6 +21,13 @@ Client side code written in React.js
   </ul>
   
 <h1>How to run</h1>
+Open a terminal and enter Postgres as root user.<br>
+Enter the Postgres Tests directory and Copy-Paste the createUser.sql<br>
+into the postgres prompt.<br>
+Then copy-paste the templatePostgres.sql in the same prompt.<br>
+This creates a user and the database required to run our application. <br>
+<br>
+<br>
 Open two terminals. <br>
 cd into the backend and frontend directories <br>
 Then run in both directories: <br>
