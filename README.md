@@ -19,6 +19,12 @@ Client side code written in React.js
     <li> Email reminders </li>
     <li> Weather Updates </li>
   </ul>
+  
+<h1>How to run</h1>
+npm install
+-make sure a node modules folder appears 
+npm start
+
 
 
 <h2>Front End =====> </h2>
@@ -70,8 +76,3 @@ Client side code written in React.js
     The same goes for the user group table. 
   
   
-
-=======
-npm install
--make sure a node modules folder appears 
-npm start
