@@ -21,6 +21,10 @@ Client side code written in React.js
   </ul>
   
 <h1>How to run</h1>
+Open two terminals.
+cd into the backend and frontend directories
+Then run in both directories:
+
 npm install <br>
 
 npm start
