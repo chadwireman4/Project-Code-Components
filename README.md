@@ -55,7 +55,7 @@ Client side code written in React.js
     a database provided to us for free to use on our web app. 
   
 
-  <h3>Features: </h3>
+  <h3>Features:  </h3>
 
    One thing we were worried about when creating the databases, was that
       a person who gained access to a user's ID could access all of their
