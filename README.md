@@ -1,9 +1,7 @@
 # Project-Code-Components
 All the code for our project
 
-Client side code written in React.js 
-
-<h1>Presentation Rough Draft</h1>
+<h1>Project Summary</h1>
 
 <h2>Overview of MicroManage &mu;</h2>
   <h3>What Does MicroManage do?</h3>
@@ -11,7 +9,13 @@ Client side code written in React.js
       intuitive and minimilast user interface to a database which allows
       users to plan out their days, weeks, months, and years. <br>
 
-    
+  <h3>Software Used: </h3>  
+  <ul>
+    <li> Node.js with Express framework</li>
+    <li> React JS</li>
+    <li> Postgres DB </li>
+  </ul>
+  
   <h3>Features:</h3>
   <ul>
     <li> Dark mode </li>
@@ -29,6 +33,7 @@ This creates a user and the database required to run our application. <br>
 <br>
 <br>
 Open two terminals. <br>
+npm install -g nodemon (global) or npm install nodemon --save (local)<br>
 cd into the backend and frontend directories <br>
 Then run in both directories: <br>
 
