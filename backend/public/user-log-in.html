@@ -11,8 +11,8 @@
 		<img src="/micromanage.svg">
 		<h1>MicroManage</h1>
 		<form action= '/' method="POST" id = "form">
-			<p>Username</p>
-			<input type="username" name="Username" autocomplete="on" autocorrect="off" autocapitalize="off" spellcheck="false">
+			<p>Email</p>
+			<input id="email" type="email" name="Email" autocomplete="on" autocorrect="off" autocapitalize="off" spellcheck="false">
 			<p>Password</p>
 			<input type="password" name="Password">
 			<div id="links">
@@ -27,20 +27,35 @@
 		});
 		var createAccount = document.forms["form"];
 		createAccount.addEventListener("submit", function(event){
-			event.preventDefault(); //prevent page load
-			fetch(event.target.action, {
-				method: 'POST',
-				body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-				}).then((resp) => {
-					return resp.json(); 
-				}).then((body) => {
-					console.log(body.message);
-					if(body.message === 'error') alert("invalid username or password.");
-					else location.replace('http://localhost:3000');
-				}).catch((error) => {
-					console.log(error);
-			});
-		}, false);
+            console.log(document.getElementById("email").value);
+            var user_email = document.getElementById("email").value;
+            event.preventDefault(); //prevent page load
+            fetch(event.target.action, {
+                method: 'POST',
+                body: new URLSearchParams(new FormData(event.target)) // event.target is the form
+                }).then((resp) => {
+                    return resp.json();
+                }).then((body) => {
+                    console.log("success!!!");
+                    console.log(body.message);
+
+                    if(body.data === true && body.message == "Success"){
+                        fetch(`/api/validated/?user_email=${user_email}`)
+                        .then( res => res.json())
+                        .then( res =>{
+                            console.log(res.message);
+                            location.replace('http://localhost:3000');
+                        })
+                        .catch(e => console.log(e))
+                    }
+                        
+                    else{
+                        alert("invalid email or password");
+                    }    
+                }).catch((error) => {
+                    console.log(error);
+            });
+        }, false);
 	</script>
 </body>
 </html>

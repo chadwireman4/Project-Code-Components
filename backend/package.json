@@ -2,17 +2,21 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "backend for calendar app with express",
-  "main": "index.js",
+  "main": "server.js",
   "dependencies": {
+    "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
-    "express": "latest",
+    "express": "^4.16.4",
+    "jasmine": "^3.4.0",
+    "jasmine-node": "^1.16.2",
+    "nock": "^10.0.6",
     "node-mailjet": "^3.3.1",
     "pg-promise": "^8.6.4",
     "request": "^2.88.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "nodemon server.js"
   },
   "author": "Brooke",
   "license": "ISC"

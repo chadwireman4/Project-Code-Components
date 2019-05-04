@@ -1,0 +1,17 @@
+/* DARK MODE */
+body.dark {
+    background-color: black;
+    /*color: #ddd;*/
+    animation-name: fadeBackground;
+    animation-duration: .5s;
+}
+/*
+header.dark {
+    background-color: #444;
+}*/
+
+/* animations */
+@keyframes fadeBackground {
+    from {background-color: white;}
+    to {background-color: black;}
+}

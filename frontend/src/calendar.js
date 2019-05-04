@@ -9,6 +9,7 @@
 
 import React, { Component } from 'react'
 import './index.css';
+import './dark.css';
 
 //use big calendar react package and custom CSS file
 import BigCalendar from 'react-big-calendar'
@@ -31,8 +32,6 @@ import WeatherModule from './weatherModule';
 moment.locale('en-GB');
 const localizer = BigCalendar.momentLocalizer(moment); // or globalizeLocalizer
 
-//date object for JS used => date(year, month, day, hours, min ); //start at 0
-
 class MyCalendar extends Component {
   constructor(props) {
     super(props);
@@ -40,32 +39,36 @@ class MyCalendar extends Component {
       nameToUpdate: 'Event Name',
       idToUpdate: '',
       clicked: false,
-      id: [],
       myEventsList: [{
         'title' : 'testing',
         'start' : new Date(2019, 3, 9),
         'end' : new Date(2019, 3, 9)
       }],
       todaysEvents:[],
-      email : 'origamiguru98@gmail.com'
+      userName : '',
+      email: ''
     }
     this.handleSelectSlot = this.handleSelectSlot.bind(this);
     this.update = this.update.bind(this);
     this.toggle = this.toggle.bind(this);
     this.add = this.add.bind(this);
     this.getID = this.getID.bind(this);
+    this.convertToCalendarFormat = this.convertToCalendarFormat.bind(this);
   }
 
   componentDidMount() {
-    //lets get the data in the db
-    fetch('/api')
+    //Get all of the needed data from the DB
+    fetch('/api/display-events-for-user')
     .then(res => res.json())
-    .then(res => this.setState({
-      myEventsList: convertToCalendarFormat(res.result), //turn date strings into date objects
-      todaysEvents: res.today,
-      id : res.id
+    .then(res =>
+      this.setState({
+        myEventsList : this.convertToCalendarFormat(res.data),
+        todaysEvents : res.todaysEvents,
+        userName : res.name[0].user_name,
+        email: res.email[0].user_email
     }))
-    .catch(err => console.log(err)); 
+    .then (() => this.props.setName(this.state.userName))
+    .catch(err => console.log(err));
   }
 
   //toggling for the modal
@@ -74,30 +77,30 @@ class MyCalendar extends Component {
   }
 
   //updating the event given the start,end, and name of event
-  update(updatedEvents) {
+  update(updatedEvents, updatedTodaysEvents) {
     console.log("updated");
     console.log("new event list is: ", updatedEvents);
-    this.setState({ myEventsList: updatedEvents });
+    this.setState({ myEventsList: updatedEvents, todaysEvents: updatedTodaysEvents });
   }
 
   //updatng state
-  add(newEvent, newId) {
-    console.log("new event is: ", newEvent);
-    console.log("new id: ", newId);
+  add(newEvent, updatedTodaysEvents) {
+    console.log("new event List is is: ", newEvent);
     this.setState({
       myEventsList: newEvent,
-      id: newId
+      todaysEvents : updatedTodaysEvents 
     });
   }
 
-  //our own method to get the id of a name of an item
+  //our own method to get the event_id of a selected event
   getID(indexToFind) {
     var index;
-    this.state.myEventsList.forEach(i => {
-      if (i.title === indexToFind) {
+    this.state.myEventsList.forEach( i => {
+      if(i.title === indexToFind){
         index = i.id;
       }
-    })
+    });
+    console.log(index);
     if (typeof index !== "undefined") return index;
     else return -1;
   }
@@ -107,13 +110,25 @@ class MyCalendar extends Component {
   //it down to the task module child via props
   //get the selected id so we can edit or delete it
   handleSelectSlot = (slotInfo) => {
-    var t =new Date (slotInfo.start)
-    console.log(slotInfo.title);
-    console.log(t.toLocaleDateString());
     this.setState({idToUpdate : this.getID(slotInfo.title)});
     this.setState({nameToUpdate: slotInfo.title});
-    //alert(`Event: ${slotInfo.title} Starts at: ${slotInfo.start} and is: ${typeof slotInfo.start}`);
     !this.state.clicked ? this.setState({ clicked: true }) : this.setState({ clicked: false });
+  }
+
+  //convert the events
+  convertToCalendarFormat(a){
+    console.table(a);
+    var eventList = [];
+    a.forEach( i => {
+      eventList.push({
+        'title' : i.event_name,
+        'start' : new Date(i.event_start_time),
+        'end' : new Date(i.event_end_time),
+        id : i.event_id
+      })
+    })
+    console.table(eventList);
+    return eventList;
   }
 
   //this will render the calendat to the screen
@@ -141,8 +156,7 @@ class MyCalendar extends Component {
       //pass props to child
       <MyModal toggle={this.state.clicked}
         onToggle={this.toggle}
-        onEdit={this.update}
-        onDelete={this.update}
+        onUpdate={this.update}
         index = {this.state.idToUpdate}
         selectedName = {this.state.nameToUpdate}
       />
@@ -151,7 +165,7 @@ class MyCalendar extends Component {
 
   renderAddEvent() {
     return (
-      <AddEventModal id={this.state.id} onAddEvent={this.add} />
+      <AddEventModal onAddEvent={this.add} />
     )
   }
 
@@ -182,20 +196,19 @@ class MyCalendar extends Component {
           {this.renderAddEvent()}
           {this.renderReminder()}
           {this.renderModal()}
-          <div id = "calendar-wrapper">
-            <div id="calendar">
-              {this.renderBigCalendar()}
-            </div>
-          </div>
-          <div id="weatherToday">
-            {this.renderWeatherModule()}
-          </div>
           <div id="other-content">
+            <div id="weatherToday">
+              {this.renderWeatherModule()}
+            </div>
             <div id="todayEvents">
               {this.renderTodaysEvents()}
             </div>
           </div>
-
+          <div id="calendar-wrapper">
+            <div id="calendar">
+              {this.renderBigCalendar()}
+            </div>
+          </div>
         </React.Fragment>
       );
     }
@@ -203,33 +216,23 @@ class MyCalendar extends Component {
       <React.Fragment>
         {this.renderAddEvent()}
         {this.renderReminder()}
-        <div id = "calendar-wrapper">
-            <div id="calendar">
-              {this.renderBigCalendar()}
-            </div>
-        </div>
-        <div id="weatherToday">
+        <div id="other-content">
+          <div id="weatherToday">
             {this.renderWeatherModule()}
-        </div>
-        <div id="todayEvents">
+          </div>
+          <div id="todayEvents">
             {this.renderTodaysEvents()}
+          </div>
+        </div>
+        <div id="calendar-wrapper">
+          <div id="calendar">
+            {this.renderBigCalendar()}
+          </div>
         </div>
       </React.Fragment>
     );
   }
 }
 
-function 	convertToCalendarFormat(a){
-  var eventList = [];
-  a.forEach( i => {
-    eventList.push({
-      'title' : i.title,
-      'start' : new Date(i.start),
-      'end' : new Date(i.end),
-      id : i.id
-    })
-  })
-  return eventList;
-}
 
 export default MyCalendar;

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>MicroManage | Register</title>
+	<link rel="stylesheet" href="/log-in.css">
+	<link rel="shortcut icon" type="image/x-icon" href="/mu_favicon.ico">
+	<script>
+		//check if form fields are valid
+	</script>
+</head>
+<body>
+	<div id="container">
+		<img src="micromanage.svg">
+		<h1>Create New Group</h1>
+		<form action="/api/add-appointment" method="POST">
+			<p>Group Name</p>
+			<input type="group_name" name="group_name" autocomplete="on" autocorrect="off" autocapitalize="off" spellcheck="false">
+                <p>Title</p> <input type="text" name="event_name" />
+                <p>Start</p> <input type="datetime-local" name="event_start_time"  />
+                <p>End</p> <input type="datetime-local" name="event_end_time"   />
+                <p>Urgency</p> <input type="number" name="event_urgency" min = "0" max = "10"  />
+            <div id="links">
+				<button id="add-appointment" type="submit" value=" Add New Event">Add Event</button>
+			</div>
+            <br>
+	</div>
+	<script>
+	</script>
+</body>
+</html>
