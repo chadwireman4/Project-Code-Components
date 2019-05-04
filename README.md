@@ -40,7 +40,14 @@ Then run in both directories: <br>
 npm install <br>
 
 npm start <br> <br>
+<h1>Repo Organization/Structure</h1> each branch is dif feature, test-app is staging branch, master is final app
+Our final branch is split into two folders, "frontend" and "backend". <br>
+The frontend folder contains html and css files. <br>
+The backend folder contains the template for the SQL database as well as the API js files. <br><br>
 
+We have multiple branches, each with a different feature:<br> 
+testing-app branch is the staging branch, where we test our new code and make sure it implements well.<br>
+master branch is all of our tested code that works.<br>
 
 <h1>Documentation</h1>
 Milestones: &nbsp; https://github.com/rahuldepa/Milestones <br>
