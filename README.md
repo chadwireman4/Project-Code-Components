@@ -22,6 +22,9 @@ All the code for our project
     <li> Edit events </li>
     <li> Email reminders </li>
     <li> Weather Updates </li>
+    <li> Add Groups </li>
+    <li> Add Appointments for Groups </li>
+    <li> Secure Password Hashing via bcrypt </li>
   </ul>
   
 <h1>How to run</h1>
@@ -37,7 +40,7 @@ npm install -g nodemon (global) or npm install nodemon --save (local)<br>
 cd into the backend and frontend directories <br>
 Then run in both directories: <br>
 
-npm install <br>
+npm install bcrypt<br>
 
 npm start <br> <br>
 <h1>Repo Organization/Structure</h1> 

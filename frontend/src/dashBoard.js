@@ -3,18 +3,29 @@
 
 import React, {Component} from 'react'
 import './index.css';
+import './dark.css';
 
 //import the calendar module
 import MyCalendar from "./calendar";
 
-
-
 class DashBoard extends Component{
-    //very important to use map when rendering an array of objects!
-    //needs a unique key, which will be the id in the database
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: "u hackerman"
+        }
+    this.handleSetName = this.handleSetName.bind(this);  
+    }
+    handleSetName(userName){ 
+        console.log(userName);
+        this.setState({name : userName })
+    }
     render(){
         return(
-            <MyCalendar setName = {this.handleSetName} />      
+            <React.Fragment>
+                <h1 className = "welcomeMessage" > Welcome: {this.state.name} </h1>
+                <MyCalendar setName = {this.handleSetName}/> 
+            </React.Fragment>     
         );
     }
 }

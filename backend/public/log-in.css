@@ -50,6 +50,32 @@ button {
 	background-color: #37a;
 }
 
+#add-members {
+	color: #37a;
+	border: 3px solid #37a;
+	background-color: white;
+}
+
+#create-group {
+	float: right;
+	color: white;
+	border: 3px solid #37a;
+	background-color: #37a;
+}
+
+#new-group {
+	color: #37a;
+	border: 3px solid #37a;
+	background-color: white;
+}
+
+#add-appointment {
+	float: right;
+	color: white;
+	border: 3px solid #37a;
+	background-color: #37a;
+}
+
 button:hover {
 	cursor: pointer;
 }
