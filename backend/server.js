@@ -497,6 +497,7 @@ app.post('/api/add-appointment',(req,res) =>{
         db.one(group_query)
         .then( data => {
             var ids = data.user_id_e;
+            for (var i = 0; i < ids.length; i++) {
         var query_statement = `INSERT INTO appointments (
     user_id , 
     event_name , 
@@ -506,7 +507,7 @@ app.post('/api/add-appointment',(req,res) =>{
     event_urgency ,
     event_color )
     VALUES ( 
-        (SELECT id FROM users WHERE id = ANY($1::integer[])),
+         '${ ids[i] }' ,
         '${ name }' ,
         '${ length } hour(s)' , 
         '${ start }' ,
@@ -515,13 +516,14 @@ app.post('/api/add-appointment',(req,res) =>{
         '${ color }' );`;
 
 
-        db.none(query_statement, [ids])
+        db.none(query_statement)
         .then( () => {
             res.send({status: 'success'});
         })
         .catch( err => {
             console.log("Error: " + err );
         });
+            }
         });
         }
     res.redirect('http://localhost:3000');
