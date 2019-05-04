@@ -39,7 +39,13 @@ Then run in both directories: <br>
 
 npm install <br>
 
-npm start
+npm start <br> <br>
+
+
+<h1>Documentation</h1>
+Milestones: &nbsp; https://github.com/rahuldepa/Milestones <br>
+Meeting Notes: &nbsp; https://github.com/brookestevens/Meeting-Notes <br>
+
  
   
   
