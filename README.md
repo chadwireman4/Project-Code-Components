@@ -37,7 +37,7 @@ npm install -g nodemon (global) or npm install nodemon --save (local)<br>
 cd into the backend and frontend directories <br>
 Then run in both directories: <br>
 
-npm install <br>
+npm install bcrypt<br>
 
 npm start <br> <br>
 <h1>Repo Organization/Structure</h1> 
