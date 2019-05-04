@@ -32,8 +32,7 @@ CREATE TABLE user_group (
 	group_name VARCHAR(30),
 	group_password 	VARCHAR(40),
 	group_id SERIAL PRIMARY KEY,
-	user_id_e INTEGER,
-	FOREIGN KEY(user_id_e) REFERENCES users(id) ON DELETE CASCADE
+	user_id_e INTEGER[]
 );
 
 INSERT INTO users( user_name , user_password , user_email )

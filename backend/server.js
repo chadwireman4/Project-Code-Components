@@ -109,7 +109,19 @@ app.get('/', (req, res) => {
 
 app.get('/registration', (req, res) => {
     res.sendFile(path.join(__dirname, '/public/registration.html'));
-    
+});
+
+
+app.get('/add_group', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/add_group.html'));
+});
+
+app.get('/group_page', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/group_page.html'));
+});
+
+app.get('/group_appt', (req, res) => {
+    res.sendFile(path.join(__dirname, '/public/group_appt.html'));
 });
 
 
@@ -318,6 +330,124 @@ app.get('/api/add-user',(req,res) => {
 });
 
 
+//Creating a new User Account
+app.post('/api/check-group',(req,res) => {
+    //Checks if user-name OR email is in db
+    //Returns true or false.
+    console.log("Checking email..");
+
+    var group_name = req.body.group_name;
+	var members = new Array();
+    
+    console.log(req.body.group_name);
+    
+    var potential_members = [req.body.member0, req.body.member1, req.body.member2, req.body.member3, req.body.member4, req.body.member5];
+            
+    for (var i = 0; i < 6; i++) {
+        if (potential_members[i] === '') {
+            break;
+        }
+        //potential_members[i] = "'" + potential_members[i] + "'";
+        members.push(potential_members[i]);
+    }
+    
+    console.log("members:" + members );
+
+    var query_statement = `SELECT EXISTS(SELECT 1 FROM user_group WHERE group_name = '${ group_name }');`;
+    var lookup_email_ids = `SELECT array_agg(id) FROM users WHERE user_email = ANY($1::varchar[]);`;
+  console.log(members);
+    db.any(lookup_email_ids, [members])
+    .then( id_data => {
+          var user_ids = id_data[0].array_agg;
+          user_ids.push(current_user_id);
+          console.log(user_ids);
+        console.log(members);
+        var query_statement_two = `INSERT INTO user_group(group_name , user_id_e) VALUES('${group_name}', ($1::integer[]));`;
+        var query_statement_three = `SELECT group_id FROM user_group WHERE group_name = '${group_name}';`;
+        db.one(query_statement)
+        .then( data => {
+            console.log("Database queried successfully in check group...");
+            console.log(data.exists);
+            if(!data.exists){
+                db.none(query_statement_two, [user_ids])
+                .then( () => {
+                    db.one(query_statement_three)
+                    .then(data =>{
+                        console.log("New Group ID: " + data.group_id);
+                    })
+                    .catch(er => console.log(er) );  
+                    res.redirect('http://localhost:3000'); //successfully added a new User
+                })
+                .catch(e => console.log(e));
+            }
+            else{
+                console.log("group already exists");
+                res.redirect('/add_group');
+            }
+        })
+        .catch( err => {
+            console.log("Error: " + err );
+        });
+    });
+    });
+
+
+app.get('/api/add-group',(req,res) => {
+    //Adds User to user table
+    console.log("Adding User.");
+    var name = req.body.group_name;
+    var password = null;
+    var email = req.body.user_email;
+    var user_id = null;
+  
+    var find_user_id = `SELECT user_id FROM USERS WHERE user_name = name`;
+  
+    db.one(find_user_id)
+    .then( (data) => {
+      user_id = data.user_id;
+    }).
+    catch( err => {
+        console.log("Error: " + err );
+    });
+
+    var query_statement = `INSERT INTO user_group(group_name , group_password,
+    user_id_e) VALUES('${name}', '${password}', '${user_id}');`;
+
+
+    db.none(query_statement)
+    .then( () => {
+        console.log("Success.");
+    })
+    .catch( err => {
+        console.log("Error: " + err );
+    });
+});
+
+
+app.get('/api/group-validated',(req,res) => {
+    //Checks if user-name OR email is in db
+    //Returns true or false.
+    console.log("Fetching user id with email..");
+
+    var group_name = req.query.group_name;
+    console.log("group_name:" + group_name );
+
+    var query_statement = `SELECT group_id FROM users WHERE group_name = '${group_name}';`;
+    db.one(query_statement)
+    .then( data => {
+        console.log("Database queried successfully... Group Id: ", data.group_id);
+        current_user_id = data.group_id;
+        res.send({ 
+            message:"Success",
+        });
+        res.end();
+    })
+    .catch( err => {
+        console.log("Error: " + err );
+    });
+});
+
+
 
 app.post('/api/add-appointment',(req,res) =>{
     //Requires user_id from front end
@@ -329,7 +459,10 @@ app.post('/api/add-appointment',(req,res) =>{
     var end = req.body.event_end_time;
     var urg = req.body.event_urgency;
     var color = "none";
+    var group_n = req.body.group_name;
     console.log(`${start} , ${end} , ${length}, ${name}, ${urg}`);
+    
+    if (group_n === undefined) {
 
     var query_statement = `INSERT INTO appointments (
     user_id , 
@@ -356,6 +489,42 @@ app.post('/api/add-appointment',(req,res) =>{
         .catch( err => {
             console.log("Error: " + err );
         });
+    }
+    else {
+        
+        console.log(group_n);
+        var group_query = `SELECT user_id_e FROM user_group WHERE group_name = '${group_n}';`;
+        db.one(group_query)
+        .then( data => {
+            var ids = data.user_id_e;
+        var query_statement = `INSERT INTO appointments (
+    user_id , 
+    event_name , 
+    event_length , 
+    event_start_time , 
+    event_end_time , 
+    event_urgency ,
+    event_color )
+    VALUES ( 
+        (SELECT id FROM users WHERE id = ANY($1::integer[])),
+        '${ name }' ,
+        '${ length } hour(s)' , 
+        '${ start }' ,
+        '${ end }' ,
+        '${ urg }' ,
+        '${ color }' );`;
+
+
+        db.none(query_statement, [ids])
+        .then( () => {
+            res.send({status: 'success'});
+        })
+        .catch( err => {
+            console.log("Error: " + err );
+        });
+        });
+        }
+    res.redirect('http://localhost:3000');
 });
 
 app.get('/api/delete-user', (req,res) => {

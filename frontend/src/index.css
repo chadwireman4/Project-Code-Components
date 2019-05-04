@@ -79,9 +79,17 @@ h2 {
 }
 
 .el-checkbox {
-  padding: 22.203px 128px 0 0;
+  padding: 22.203px 181px 0 0;
   display: inline;
   float: right;
+}
+
+#addGroupIcon {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: 0px;
+  right: 159px;
 }
 
 #addIcon {
