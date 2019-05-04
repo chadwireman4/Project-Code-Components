@@ -37,39 +37,13 @@ button {
 	width: 180px;
 }
 
-#create-account {
-	color: #37a;
-	border: 3px solid #37a;
-	background-color: white;
-}
-
-#log-in {
-	float: right;
-	color: white;
-	border: 3px solid #37a;
-	background-color: #37a;
-}
-
-#add-members {
+#add-member {
 	color: #37a;
 	border: 3px solid #37a;
 	background-color: white;
 }
 
 #create-group {
-	float: right;
-	color: white;
-	border: 3px solid #37a;
-	background-color: #37a;
-}
-
-#new-group {
-	color: #37a;
-	border: 3px solid #37a;
-	background-color: white;
-}
-
-#add-appointment {
 	float: right;
 	color: white;
 	border: 3px solid #37a;
