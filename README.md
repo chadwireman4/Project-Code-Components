@@ -22,6 +22,9 @@ All the code for our project
     <li> Edit events </li>
     <li> Email reminders </li>
     <li> Weather Updates </li>
+    <li> Add Groups </li>
+    <li> Add Appointments for Groups </li>
+    <li> Secure Password Hashing via bcrypt </li>
   </ul>
   
 <h1>How to run</h1>
